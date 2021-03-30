@@ -134,7 +134,7 @@ tab1_content = dbc.Card(
             html.P("Lorenzo and Catarina's Work", className="card-text"),
         ]
     ),
-    className="mt-3",
+    className=" mt-3",
 )
 
 tab2_content = dbc.Card(

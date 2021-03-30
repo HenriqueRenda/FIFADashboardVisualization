@@ -13,6 +13,7 @@ from dash_table import DataTable
 #import plotly.graph_objects as go
 #import numpy as np
 #import seaborn as sns
+import dash_bootstrap_components as dbc
 
 ################################################ importing the data ####################################################
 df = pd.read_csv('players_21.csv')
@@ -34,6 +35,10 @@ for i in df1.index:
 players_options_under_25 = []
 for i in df2.index:
     players_options_under_25.append({'label': df2['long_name'][i], 'value':  df2['short_name'][i]})
+#########################################################################################################################
+
+
+
 
 dropdown_player_over_25 = dcc.Dropdown(
         id='player1',
@@ -50,61 +55,42 @@ dropdown_player_under_25 = dcc.Dropdown(
 dashtable_1 = dash_table.DataTable(
         id='table1',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['short_name'] == player1].to_dict('records'),
-        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
-        style_cell={
-            'backgroundColor': 'rgb(50, 50, 50)',
-            'color': 'white'
-        }
+        data=df[df['short_name'] == player1].to_dict('records')
     )
 
 dashtable_2 = dash_table.DataTable(
         id='table2',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['short_name'] == player2].to_dict('records'),
-        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
-        style_cell={
-            'backgroundColor': 'rgb(50, 50, 50)',
-            'color': 'white'
-        }
+        data=df[df['short_name'] == player2].to_dict('records')
     )
 
 ################################################  APP  #################################################################
-app = dash.Dash(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+server = app.server
+
 # defining the layout
-app.layout = html.Div([
+app.layout = dbc.Container(
+    [
+        html.H1('Football Generation Challenge'),
+        dbc.Row(
+            [
+        #html.H2('Player-Comparison Tab'),
+                dbc.Col(
+                    html.Label('Select Player Over 25'),
+                    dropdown_player_over_25,
+                ),
+                #dbc.Col(add the man)
+                dbc.Col(dcc.Graph(id='graph_example')),
+                #dbc.Col(add the man)
+                dbc.Col(
+                    html.Label('Select Player Under 25'),
+                    dropdown_player_under_25,
+                ),
+            ]),
 
-    html.H1('Football Generation Challenge'),
-
-    html.Br(),
-    html.Hr(),
-
-    html.H2('Player-Comparison Tab'),
-
-    html.Label('Select Player Over 25'),
-    dropdown_player_over_25,
-
-    html.Br(),
-
-    html.Label('Select Player Under 25'),
-    dropdown_player_under_25,
-
-    html.Br(),
-
-    dcc.Graph(id='graph_example'),
-
-    html.Br(),
-    html.Hr(),
-    html.Br(),
-
-    dashtable_1,
-
-    html.Br(),
-
-    dashtable_2
-
-])
-
+    ]
+)
 
 ###################################################   Callbacks   ######################################################
 
@@ -116,8 +102,7 @@ app.layout = html.Div([
     ]
 )
 
-
-    ###############################################   radar plot   #####################################################
+###############################################   radar plot   #####################################################
 def radar_player(player1, player2):
 
     df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1][skill_player].iloc[0]).reset_index()
@@ -155,10 +140,6 @@ def updateTable1(player1):
 def updateTable2(player2):
     table_updated2 = df[df['short_name'] == player2].to_dict('records')
     return table_updated2
-
-
-
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
