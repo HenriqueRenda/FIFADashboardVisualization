@@ -22,55 +22,64 @@ data.drop(nonusefulcolumns, axis=1, inplace=True)
 data.drop(nonusefulattributes, axis=1, inplace=True)
 
 
-##############################################################
+################Components##############################################
+
+options = [{'label': 'Overall', 'value': 'overall'},
+           {'label': 'Potential', 'value': 'potential'},
+           {'label': 'Value', 'value': 'value_eur'},
+           {'label': 'Wage', 'value': 'wage_eur'},
+           {'label': 'Height', 'value': 'height_cm'},
+           {'label': 'Weight', 'value': 'weight_kg'},
+           {'label': 'Pace', 'value': 'pace'},
+           {'label': 'Shooting', 'value': 'shooting'},
+           {'label': 'Passing', 'value': 'passing'},
+           {'label': 'Dribbling', 'value': 'dribbling'},
+           {'label': 'Defending', 'value': 'defending'},
+           {'label': 'Physic', 'value': 'physic'}]
+
+metric_dropdown = dcc.Dropdown(
+                            id='drop',
+                            options=options,
+                            value='overall'
+                        )
+
+age_slider = dcc.RangeSlider(
+                            id='age_slider',
+                            min=data['age'].min(),
+                            max=data['age'].max(),
+                            value=[data['age'].min(), data['age'].max()],
+                            step=1,
+                            marks={16: '16',
+                                22: '20',
+                                26: '24',
+                                30: '28',
+                                34: '32',
+                                38: '36',
+                                42: '40',
+                                46: '44',
+                                50: '48',
+                                54: '52'}
+                        )
+
+########Dash App Layout##########################
 
 app = dash.Dash(__name__)
 
 server = app.server
 
-options = [{'label': 'Height', 'value': 'height_cm'},
-           {'label': 'Weight', 'value': 'weight_kg'},
-           {'label': 'Potential', 'value': 'potential'},
-           {'label': 'Overall', 'value': 'overall'}]
-
 app.layout = html.Div([
-    html.H1("League Analysis by Age"),
-
-    html.Br(),
-
     html.Label('Choose a Attribute:'),
-    dcc.Dropdown(
-        id='drop',
-        options=options,
-        value='overall'
-    ),
-
+    html.Br(),
+    metric_dropdown,
     dcc.Graph(
         id='example-graph'
     ),
-
     html.Br(),
-
-    dcc.RangeSlider(
-        id='age_slider',
-        min=data['age'].min(),
-        max=data['age'].max(),
-        value=[data['age'].min(), data['age'].max()],
-        step=1,
-        marks={16: '16',
-               18: '18',
-               22: '22',
-               26: '26',
-               30: '30',
-               34: '34',
-               38: '38',
-               42: '42',
-               46: '46',
-               50: '50',
-               54: '54'}
-    )
+    age_slider
+    
 ])
 
+#########Callbacks########################################
 
 @app.callback(
     Output(component_id='example-graph', component_property='figure'),
@@ -79,8 +88,9 @@ app.layout = html.Div([
 )
 
 
+###########Bar plot#######################################
 
-def update_graph(input_value, age):
+def bar_plot(input_value, age):
     filtered_by_age_data = data[(data['age'] >= age[0]) & (data['age'] <= age[1])]
 
     data_bar = dict(
@@ -90,7 +100,8 @@ def update_graph(input_value, age):
         textposition='outside'
     )
 
-    layout_bar = dict(xaxis=dict(title='League'),
+    layout_bar = dict(title='League Analysis by Age',
+                      xaxis=dict(title='League'),
                       yaxis=dict(title=input_value),
                       height=400,
                       template='plotly_dark')
