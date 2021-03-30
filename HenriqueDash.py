@@ -8,6 +8,7 @@ import numpy as np
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
 
 # Dataset Processing
 
@@ -37,10 +38,22 @@ options = [{'label': 'Overall', 'value': 'overall'},
            {'label': 'Defending', 'value': 'defending'},
            {'label': 'Physic', 'value': 'physic'}]
 
-metric_dropdown = dcc.Dropdown(
-                            id='drop',
+metric1_dropdown = dcc.Dropdown(
+                            id='drop1',
                             options=options,
                             value='overall'
+                        )
+
+metric2_dropdown = dcc.Dropdown(
+                            id='drop2',
+                            options=options,
+                            value='potential'
+                        )
+
+metric3_dropdown = dcc.Dropdown(
+                            id='drop3',
+                            options=options,
+                            value='value_eur'
                         )
 
 age_slider = dcc.RangeSlider(
@@ -63,52 +76,171 @@ age_slider = dcc.RangeSlider(
 
 ########Dash App Layout##########################
 
-app = dash.Dash(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
 
-app.layout = html.Div([
-    html.Label('Choose a Attribute:'),
-    html.Br(),
-    metric_dropdown,
-    dcc.Graph(
-        id='example-graph'
+navbar = dbc.Navbar(
+    [
+        html.A(
+            # Use row and col to control vertical alignment of logo / brand
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(src='/assets/logo.png', height="150px")),
+                ],
+                align="center",
+                no_gutters=True,
+            ),
+            href="https://plot.ly",
+        ),
+    ],
+    color="#3A2657",
+    dark=True,
+)
+
+controls = dbc.Card(
+    [
+        dbc.FormGroup(
+            [
+                html.Label('Choose a Attribute:'),
+                html.Br(),
+                metric1_dropdown,
+            ]
+        ),
+
+        dbc.FormGroup(
+            [
+                html.Label('Choose a Attribute:'),
+                html.Br(),
+                metric2_dropdown,
+            ]
+        ),
+
+        dbc.FormGroup(
+            [
+                html.Label('Choose a Attribute:'),
+                html.Br(),
+                metric3_dropdown
+            ]
+        ),
+    ],
+    body=True,
+)
+
+
+tab1_content = dbc.Card(
+    dbc.CardBody(
+        [
+            html.P("Lorenzo and Catarina's Work", className="card-text"),
+        ]
     ),
-    html.Br(),
-    age_slider
-    
-])
+    className="mt-3",
+)
+
+tab2_content = dbc.Card(
+    dbc.CardBody(
+        [
+            html.H1("League and Clubs Analysis"),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(controls,sm=3),
+
+                    dbc.Col(
+                        dcc.Graph(id='example-graph1'),sm=3
+                        ),
+
+                    dbc.Col(
+                        dcc.Graph(id='example-graph2'),sm=3
+                        ),
+
+                    dbc.Col(
+                        dcc.Graph(id='example-graph3'),sm=3
+                        ),
+                ],
+                align="center",
+            ),
+            
+            dbc.Row(
+                [
+                    dbc.Col(age_slider)
+                ],
+                align="center",
+            ),
+        ]
+    ),
+    className=" mt-3", 
+)    
+
+app.layout = dbc.Container([
+        #html.H1("Fifa Players Analysis"),
+        navbar,
+
+        dbc.Tabs(
+            [
+                dbc.Tab(tab1_content, label="Tab 1"),
+                dbc.Tab(tab2_content, label="Tab 2"),
+            ]
+        ),
+    ],
+    fluid=True,
+)
 
 #########Callbacks########################################
 
 @app.callback(
-    Output(component_id='example-graph', component_property='figure'),
-    [Input(component_id='drop', component_property='value'), 
+    [Output(component_id='example-graph1', component_property='figure'),
+     Output(component_id='example-graph2', component_property='figure'),
+     Output(component_id='example-graph3', component_property='figure')],
+    [Input(component_id='drop1', component_property='value'),
+     Input(component_id='drop2', component_property='value'),
+     Input(component_id='drop3', component_property='value'), 
      Input(component_id="age_slider", component_property="value")]
 )
 
 
 ###########Bar plot#######################################
 
-def bar_plot(input_value, age):
+def bar_plot(input_value1,input_value2,input_value3, age):
+
     filtered_by_age_data = data[(data['age'] >= age[0]) & (data['age'] <= age[1])]
 
-    data_bar = dict(
+    data_bar1 = dict(
         type='bar',
-        y=filtered_by_age_data.groupby('league_name').median()[input_value].sort_values(ascending=False).head(5),
+        y=filtered_by_age_data.groupby('league_name').median()[input_value1].sort_values(ascending=False).head(5),
         x=filtered_by_age_data['league_name'].unique(),
         textposition='outside'
     )
 
-    layout_bar = dict(title='League Analysis by Age',
+    data_bar2 = dict(
+        type='bar',
+        y=filtered_by_age_data.groupby('league_name').median()[input_value2].sort_values(ascending=False).head(5),
+        x=filtered_by_age_data['league_name'].unique(),
+        textposition='outside'
+    )
+
+    data_bar3 = dict(
+        type='bar',
+        y=filtered_by_age_data.groupby('league_name').median()[input_value3].sort_values(ascending=False).head(5),
+        x=filtered_by_age_data['league_name'].unique(),
+        textposition='outside'
+    )
+
+    layout_bar1 = dict(
                       xaxis=dict(title='League'),
-                      yaxis=dict(title=input_value),
-                      height=400,
-                      template='plotly_dark')
+                      yaxis=dict(title=input_value1))
+    
+    layout_bar2 = dict(
+                      xaxis=dict(title='League'),
+                      yaxis=dict(title=input_value2))
+    
+    layout_bar3 = dict(
+                      xaxis=dict(title='League'),
+                      yaxis=dict(title=input_value3))
 
-    fig = go.Figure(data=data_bar, layout=layout_bar)
-
-    return fig
+    return go.Figure(data=data_bar1, layout=layout_bar1), \
+           go.Figure(data=data_bar2, layout=layout_bar2), \
+           go.Figure(data=data_bar3, layout=layout_bar3)
 
 
 if __name__ == '__main__':
