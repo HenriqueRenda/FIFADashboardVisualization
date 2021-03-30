@@ -72,25 +72,41 @@ server = app.server
 # defining the layout
 app.layout = dbc.Container(
     [
-        html.H1('Football Generation Challenge'),
+        html.H2('Player-Comparison Tab'),
         dbc.Row(
             [
-        #html.H2('Player-Comparison Tab'),
-                dbc.Col(
-                    html.Label('Select Player Over 25'),
-                    dropdown_player_over_25,
-                ),
-                #dbc.Col(add the man)
-                dbc.Col(dcc.Graph(id='graph_example')),
-                #dbc.Col(add the man)
-                dbc.Col(
-                    html.Label('Select Player Under 25'),
-                    dropdown_player_under_25,
-                ),
-            ]),
+                dbc.Col([
+                    dbc.Row(
+                            dropdown_player_over_25
+                        ),
+                    dbc.Row(
+                            dbc.Table(dashtable_1)
+                        )
+                ],sm=3),
 
+                #dbc.Col(add the man)
+
+                dbc.Col(dcc.Graph(id='graph_example'),sm=6),
+
+                #dbc.Col(add the man)
+
+                dbc.Col([
+                    dbc.Row(
+                        [
+                            dropdown_player_under_25
+                        ]),
+                    dbc.Row(
+                        [
+                            dbc.Table(dashtable_2)
+                        ])
+                ],sm=3),
+            ]
+        ),
+        html.Br(),
     ]
 )
+
+
 
 ###################################################   Callbacks   ######################################################
 
@@ -117,8 +133,7 @@ def radar_player(player1, player2):
 
     colors = ['red', 'blue']
     fig = px.line_polar(df_for_plot, r='score', theta="skill", color="name", line_close=True,
-                        color_discrete_sequence=colors,
-                        template="plotly_dark")
+                        color_discrete_sequence=colors)
     fig.update_traces(fill='toself')
     return fig
 
