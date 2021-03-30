@@ -1,66 +1,134 @@
+# importing the libraries
+import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-
-import pandas as pd
-import plotly.graph_objs as go
-import matplotlib.pyplot as plt
-from tabulate import tabulate
-import plotly.graph_objects as go
+import dash_table
 import plotly.express as px
-import numpy as np
-import seaborn as sns
+from dash_table import DataTable
+# import plotly.graph_objs as go
+#import matplotlib.pyplot as plt
+#from tabulate import tabulate
+#import plotly.graph_objects as go
+#import numpy as np
+#import seaborn as sns
 
-# importing the data
+################################################ importing the data ####################################################
 df = pd.read_csv('players_21.csv')
+df1 = df[df['age'] > 25] # dataset for players over 25
+df2 = df[df['age'] <= 25] # dataset for players under 25
 
-players_options = []
-for i in df.index:
-    players_options.append({'label': df['long_name'][i], 'value':  df['short_name'][i]})
+# variables for the analysis
+skill_player = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
+info_player = ['short_name','nationality', 'club_name', 'age', 'height_cm', 'weight_kg']
+player1 = 'L. Messi'
+player2 = 'K. Mbappé'
 
-# The app itself
+
+###################################################   Interactive Components   #########################################
+# choice of the players
+players_options_over_25 = []
+for i in df1.index:
+    players_options_over_25.append({'label': df1['long_name'][i], 'value':  df1['short_name'][i]})
+players_options_under_25 = []
+for i in df2.index:
+    players_options_under_25.append({'label': df2['long_name'][i], 'value':  df2['short_name'][i]})
+
+dropdown_player_over_25 = dcc.Dropdown(
+        id='player1',
+        options=players_options_over_25,
+        value='L. Messi'
+    )
+
+dropdown_player_under_25 = dcc.Dropdown(
+        id='player2',
+        options=players_options_under_25,
+        value='K. Mbappé'
+    )
+
+dashtable_1 = dash_table.DataTable(
+        id='table1',
+        columns=[{"name": i, "id": i} for i in info_player],
+        data=df[df['short_name'] == player1].to_dict('records'),
+        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+        style_cell={
+            'backgroundColor': 'rgb(50, 50, 50)',
+            'color': 'white'
+        }
+    )
+
+dashtable_2 = dash_table.DataTable(
+        id='table2',
+        columns=[{"name": i, "id": i} for i in info_player],
+        data=df[df['short_name'] == player2].to_dict('records'),
+        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+        style_cell={
+            'backgroundColor': 'rgb(50, 50, 50)',
+            'color': 'white'
+        }
+    )
+
+################################################  APP  #################################################################
 app = dash.Dash(__name__)
-
+# defining the layout
 app.layout = html.Div([
 
-    html.H1('Player-Comparison Tab'),
+    html.H1('Football Generation Challenge'),
 
-    html.Label('Select Player 1'),
-    dcc.Dropdown(
-        id='player1',
-        options=players_options,
-        value='L. Messi'
-    ),
+    html.Br(),
+    html.Hr(),
 
-    html.Label('Select Player 2'),
-    dcc.Dropdown(
-        id='player2',
-        options=players_options,
-        value='Cristiano Ronaldo'
-    ),
+    html.H2('Player-Comparison Tab'),
 
-    dcc.Graph(id='graph_example')
+    html.Label('Select Player Over 25'),
+    dropdown_player_over_25,
+
+    html.Br(),
+
+    html.Label('Select Player Under 25'),
+    dropdown_player_under_25,
+
+    html.Br(),
+
+    dcc.Graph(id='graph_example'),
+
+    html.Br(),
+    html.Hr(),
+    html.Br(),
+
+    dashtable_1,
+
+    html.Br(),
+
+    dashtable_2
+
 ])
+
+
+###################################################   Callbacks   ######################################################
 
 @app.callback(
     Output('graph_example', 'figure'),
-    [Input('player1', 'value'),
-     Input('player2', 'value')]
+    [
+        Input('player1', 'value'),
+        Input('player2', 'value')
+    ]
 )
 
-# function for the plot
+
+    ###############################################   radar plot   #####################################################
 def radar_player(player1, player2):
-    info_player = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
-    df1 = pd.DataFrame(df[df['short_name'] == player1][info_player].iloc[0]).reset_index()
-    df1['name'] = player1
-    df1.columns = ['skill', 'score', 'name']
 
-    df2 = pd.DataFrame(df[df['short_name'] == player2][info_player].iloc[0]).reset_index()
-    df2['name'] = player2
-    df2.columns = ['skill', 'score', 'name']
+    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1][skill_player].iloc[0]).reset_index()
+    df1_for_plot['name'] = player1
+    df1_for_plot.columns = ['skill', 'score', 'name']
 
-    df_for_plot = pd.concat([df1, df2], axis = 0)
+    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2][skill_player].iloc[0]).reset_index()
+    df2_for_plot['name'] = player2
+    df2_for_plot.columns = ['skill', 'score', 'name']
+
+    df_for_plot = pd.concat([df1_for_plot, df2_for_plot], axis = 0)
 
     colors = ['red', 'blue']
     fig = px.line_polar(df_for_plot, r='score', theta="skill", color="name", line_close=True,
@@ -68,6 +136,28 @@ def radar_player(player1, player2):
                         template="plotly_dark")
     fig.update_traces(fill='toself')
     return fig
+
+    ###############################################   table 1   ########################################################
+@app.callback(
+    Output('table1', 'data'),
+    [Input('player1', 'value')]
+)
+def updateTable1(player1):
+    table_updated1 = df[df['short_name'] == player1].to_dict('records')
+    return table_updated1
+
+    ###############################################   table 2   ########################################################
+@app.callback(
+    Output('table2', 'data'),
+    [Input('player2', 'value')]
+)
+
+def updateTable2(player2):
+    table_updated2 = df[df['short_name'] == player2].to_dict('records')
+    return table_updated2
+
+
+
 
 
 if __name__ == '__main__':
