@@ -34,7 +34,7 @@ options = [{'label': 'Height', 'value': 'height_cm'},
            {'label': 'Overall', 'value': 'overall'}]
 
 app.layout = html.Div([
-    html.H1("Player's attributes Comparison by Country"),
+    html.H1("League Analysis by Age"),
 
     html.Br(),
 
@@ -56,7 +56,18 @@ app.layout = html.Div([
         min=data['age'].min(),
         max=data['age'].max(),
         value=[data['age'].min(), data['age'].max()],
-        step=1
+        step=1,
+        marks={16: '16',
+               18: '18',
+               22: '22',
+               26: '26',
+               30: '30',
+               34: '34',
+               38: '38',
+               42: '42',
+               46: '46',
+               50: '50',
+               54: '54'}
     )
 ])
 
@@ -69,27 +80,22 @@ app.layout = html.Div([
 
 
 
-def update_graph(countries, input_value, age):
+def update_graph(input_value, age):
     filtered_by_age_data = data[(data['age'] >= age[0]) & (data['age'] <= age[1])]
 
-    scatter_data = []
+    data_bar = dict(
+        type='bar',
+        y=filtered_by_age_data.groupby('league_name').median()[input_value].sort_values(ascending=False).head(5),
+        x=filtered_by_age_data['league_name'].unique(),
+        textposition='outside'
+    )
 
-    for country in countries:
-        filtered_by_age_and_country_data = filtered_by_age_data.loc[filtered_by_age_data['nationality'] == country]
+    layout_bar = dict(xaxis=dict(title='League'),
+                      yaxis=dict(title=input_value),
+                      height=400,
+                      template='plotly_dark')
 
-        data_bar = dict(
-            type='bar',
-            y=filtered_by_age_and_country_data.groupby('league_name').median()[input_value].sort_values(ascending=False).head(5),
-            x=filtered_by_age_and_country_data['league_name'].unique(),
-            textposition='outside', 
-            name=country
-        )
-
-        scatter_data.append(data_bar)
-
-    layout_bar = dict(yaxis=dict())
-
-    fig = go.Figure(data=scatter_data, layout=scatter_layout)
+    fig = go.Figure(data=data_bar, layout=layout_bar)
 
     return fig
 
