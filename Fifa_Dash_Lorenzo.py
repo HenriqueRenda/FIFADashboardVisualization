@@ -32,13 +32,10 @@ player2 = 'K. Mbappé'
 players_options_over_25 = []
 for i in df1.index:
     players_options_over_25.append({'label': df1['long_name'][i], 'value':  df1['short_name'][i]})
+
 players_options_under_25 = []
 for i in df2.index:
     players_options_under_25.append({'label': df2['long_name'][i], 'value':  df2['short_name'][i]})
-#########################################################################################################################
-
-
-
 
 dropdown_player_over_25 = dcc.Dropdown(
         id='player1',
@@ -58,54 +55,73 @@ dashtable_1 = dash_table.DataTable(
         data=df[df['short_name'] == player1].to_dict('records')
     )
 
+
 dashtable_2 = dash_table.DataTable(
         id='table2',
         columns=[{"name": i, "id": i} for i in info_player],
         data=df[df['short_name'] == player2].to_dict('records')
     )
 
+#dashtable_prova = df[df['short_name'] == player2][info_player].T
+
+
+
+
+
+
 ################################################  APP  #################################################################
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-server = app.server
+# server = app.server
 
 # defining the layout
 app.layout = dbc.Container(
     [
         html.H2('Player-Comparison Tab'),
-        dbc.Row(
-            [
-                dbc.Col([
+
+        dbc.Row([
+
+
+
+            dbc.Col(
+                [
                     dbc.Row(
-                            dropdown_player_over_25
-                        ),
+                        dropdown_player_over_25
+                    ),
+
                     dbc.Row(
-                            dbc.Table(dashtable_1)
-                        )
-                ],sm=3),
+                        dbc.Table(dashtable_1)
+                       )
+                ],
+                sm=3
+            ),
 
-                #dbc.Col(add the man)
+            #dbc.Col(add the man),
 
-                dbc.Col(dcc.Graph(id='graph_example'),sm=6),
+            dbc.Col(dcc.Graph(id='graph_example'),sm=6),
 
-                #dbc.Col(add the man)
+            #dbc.Col(add the man),
 
-                dbc.Col([
+            dbc.Col(
+                [
                     dbc.Row(
                         [
                             dropdown_player_under_25
-                        ]),
+                        ]
+                    ),
+
                     dbc.Row(
                         [
                             dbc.Table(dashtable_2)
-                        ])
-                ],sm=3),
-            ]
-        ),
-        html.Br(),
+                            #dbc.Table.from_dataframe(dashtable_2, striped=True, bordered=True, hover=True)
+                        ]
+                    )
+                ],
+                sm=3
+            )
+        ])
     ]
 )
-
 
 
 ###################################################   Callbacks   ######################################################
@@ -135,6 +151,12 @@ def radar_player(player1, player2):
     fig = px.line_polar(df_for_plot, r='score', theta="skill", color="name", line_close=True,
                         color_discrete_sequence=colors)
     fig.update_traces(fill='toself')
+    fig.update_layout(
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font_color="white",
+        font_size= 15
+    )
     return fig
 
     ###############################################   table 1   ########################################################
@@ -155,6 +177,8 @@ def updateTable1(player1):
 def updateTable2(player2):
     table_updated2 = df[df['short_name'] == player2].to_dict('records')
     return table_updated2
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
