@@ -7,13 +7,13 @@ from dash.dependencies import Input, Output
 import dash_table
 import plotly.express as px
 from dash_table import DataTable
-# import plotly.graph_objs as go
+#import plotly.graph_objs as go
 #import matplotlib.pyplot as plt
-#from tabulate import tabulate
-#import plotly.graph_objects as go
+import plotly.graph_objects as go
 #import numpy as np
 #import seaborn as sns
 import dash_bootstrap_components as dbc
+
 
 ################################################ importing the data ####################################################
 df = pd.read_csv('players_21.csv')
@@ -23,6 +23,7 @@ df2 = df[df['age'] <= 25] # dataset for players under 25
 # variables for the analysis
 skill_player = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
 info_player = ['short_name','nationality', 'club_name', 'age', 'height_cm', 'weight_kg']
+skills1=['skill_curve','skill_dribbling','skill_fk_accuracy','skill_ball_control','skill_long_passing']
 player1 = 'L. Messi'
 player2 = 'K. Mbappé'
 
@@ -62,7 +63,8 @@ dashtable_2 = dash_table.DataTable(
         data=df[df['short_name'] == player2].to_dict('records')
     )
 
-#dashtable_prova = df[df['short_name'] == player2][info_player].T
+
+
 
 
 
@@ -152,13 +154,17 @@ tab1_content = html.Div(
 
                                 dbc.Row(
                                     dbc.Table(dashtable_1)
-                                )
+                                ),
+
+                                dbc.Row(dcc.Graph(id='graph_example_1')
+                                        ),
+
+                                dbc.Row(dcc.Graph(id='graph_example_3')
+                                        )
                             ],
                             sm=3,
                             align="center"
                         ),
-
-                        # dbc.Col(add the man),
 
                         dbc.Col(dcc.Graph(id='graph_example'), sm=6),
 
@@ -182,8 +188,15 @@ tab1_content = html.Div(
                                 dbc.Row(
                                     [
                                         dbc.Table(dashtable_2)
-                                        # dbc.Table.from_dataframe(dashtable_2, striped=True, bordered=True, hover=True)
                                     ]
+                                ),
+
+                                dbc.Row(
+                                    dcc.Graph(id='graph_example_2')
+                                ),
+
+                                dbc.Row(
+                                    dcc.Graph(id='graph_example_4')
                                 )
                             ],
                             sm=3
@@ -248,22 +261,63 @@ def radar_player(player1, player2):
 
     ###############################################   table 1   ########################################################
 @app.callback(
-    Output('table1', 'data'),
+    [
+        Output('table1', 'data'),
+        Output('graph_example_1', 'figure'),
+        Output('graph_example_3', 'figure')
+    ],
     [Input('player1', 'value')]
 )
+
 def updateTable1(player1):
     table_updated1 = df[df['short_name'] == player1].to_dict('records')
-    return table_updated1
+#    return table_updated1
+
+    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1]['potential'])
+    df1_for_plot['name'] = player2
+    gauge1 = go.Figure(go.Indicator(
+    domain={'x': [0, 1], 'y': [0, 1]},
+    value=df1_for_plot.potential.iloc[0],
+    mode="gauge+number",
+    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "red"}}))
+
+    # barplots
+    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1][skills1].iloc[0].reset_index())
+    df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
+    df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
+    barplot1 = px.bar(df1_for_plot, x='counts', y='skills', orientation='h')
+    barplot1.update_traces(marker_color='red')
+    return table_updated1, gauge1, barplot1
+
 
     ###############################################   table 2   ########################################################
 @app.callback(
-    Output('table2', 'data'),
+    [
+        Output('table2', 'data'),
+        Output('graph_example_2', 'figure'),
+        Output('graph_example_4', 'figure')
+    ],
     [Input('player2', 'value')]
 )
 
 def updateTable2(player2):
     table_updated2 = df[df['short_name'] == player2].to_dict('records')
-    return table_updated2
+
+    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2]['potential'])
+    df2_for_plot['name'] = player2
+    gauge2 = go.Figure(go.Indicator(
+    domain={'x': [0, 1], 'y': [0, 1]},
+    value=df2_for_plot.potential.iloc[0],
+    mode="gauge+number",
+    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "blue"}}))
+
+    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2][skills1].iloc[0].reset_index())
+    df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
+    df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
+    barplot2 = px.bar(df2_for_plot,x='counts',y='skills',orientation='h')
+    barplot2.update_traces(marker_color='blue')
+
+    return table_updated2, gauge2, barplot2
 
 
 
