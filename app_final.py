@@ -285,11 +285,17 @@ tab1_content = html.Div(
                                     dbc.Table(dashtable_1)
                                 ),
 
-                                dbc.Row(dcc.Graph(id='graph_example_1')
-                                        ),
-
-                                dbc.Row(dcc.Graph(id='graph_example_3')
-                                        )
+                                dbc.Row([
+                                    dbc.Col([
+                                        dcc.Graph(id='graph_example_1')
+                                    ]
+                                    ),
+                                    dbc.Col([
+                                        dcc.Graph(id='graph_example_3')
+                                    ]
+                                    )
+                                ]
+                                ),
                             ],
                             sm=3,
                             align="center"
@@ -320,13 +326,18 @@ tab1_content = html.Div(
                                     ]
                                 ),
 
-                                dbc.Row(
-                                    dcc.Graph(id='graph_example_2')
+                                dbc.Row([
+                                        dbc.Col([
+                                                dcc.Graph(id='graph_example_2')
+                                            ]
+                                        ),
+                                        dbc.Col([
+                                                dcc.Graph(id='graph_example_4')
+                                            ]
+                                            )
+                                        ]
                                 ),
 
-                                dbc.Row(
-                                    dcc.Graph(id='graph_example_4')
-                                )
                             ],
                             sm=3
                         )
