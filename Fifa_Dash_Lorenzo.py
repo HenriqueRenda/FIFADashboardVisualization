@@ -74,55 +74,142 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # server = app.server
 
-# defining the layout
-app.layout = dbc.Container(
+navbar = dbc.Navbar(
     [
-        html.H2('Player-Comparison Tab'),
-
-        dbc.Row([
-
-
-
-            dbc.Col(
+        html.A(
+            # Use row and col to control vertical alignment of logo / brand
+            dbc.Row(
                 [
-                    dbc.Row(
-                        dropdown_player_over_25
-                    ),
-
-                    dbc.Row(
-                        dbc.Table(dashtable_1)
-                       )
+                    dbc.Col(html.Img(src='/assets/logo.png', height="150px")),
                 ],
-                sm=3
+                align="center",
+                no_gutters=True,
             ),
+            href="https://plot.ly",
+        ),
+    ],
+    color="#3A2657",
+    dark=True,
+)
 
-            #dbc.Col(add the man),
+controls_player_1 = dbc.Card(
+    [
+        dbc.FormGroup(
+            [
+                html.Label('Choose an old-school Player:'),
+                html.Br(),
+                dropdown_player_over_25,
+            ]
+        ),
+    ],
+    body=True,
+)
 
-            dbc.Col(dcc.Graph(id='graph_example'),sm=6),
+controls_player_2 = dbc.Card(
+    [
+        dbc.FormGroup(
+            [
+                html.Label('Choose a new generation Player:'),
+                html.Br(),
+                dropdown_player_under_25,
+            ]
+        ),
+    ],
+    body=True,
+)
 
-            #dbc.Col(add the man),
 
-            dbc.Col(
+tab2_content = dbc.Card(
+    dbc.CardBody(
+        [
+            html.P("Phuc and Henrique's Work", className="card-text"),
+        ]
+    ),
+    className=" mt-3",
+)
+
+tab1_content = html.Div(
+    [
+        dbc.Card(
+            dbc.CardBody(
                 [
-                    dbc.Row(
-                        [
-                            dropdown_player_under_25
-                        ]
-                    ),
+                    html.H2('Player-Comparison Tab'),
 
-                    dbc.Row(
-                        [
-                            dbc.Table(dashtable_2)
-                            #dbc.Table.from_dataframe(dashtable_2, striped=True, bordered=True, hover=True)
-                        ]
-                    )
-                ],
-                sm=3
-            )
-        ])
+                    dbc.Row([
+
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    controls_player_1
+                                ),
+
+                                html.Br(),
+
+                                dbc.Row(html.Img(src='/assets/player_2.png', height="400px")
+                                        ),
+
+                                html.Br(),
+
+                                dbc.Row(
+                                    dbc.Table(dashtable_1)
+                                )
+                            ],
+                            sm=3,
+                            align="center"
+                        ),
+
+                        # dbc.Col(add the man),
+
+                        dbc.Col(dcc.Graph(id='graph_example'), sm=6),
+
+                        # dbc.Col(add the man),
+
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        controls_player_2
+                                    ]
+                                ),
+
+                                html.Br(),
+
+                                dbc.Row(html.Img(src='/assets/player_2.png', height="400px")
+                                        ),
+
+                                html.Br(),
+
+                                dbc.Row(
+                                    [
+                                        dbc.Table(dashtable_2)
+                                        # dbc.Table.from_dataframe(dashtable_2, striped=True, bordered=True, hover=True)
+                                    ]
+                                )
+                            ],
+                            sm=3
+                        )
+                    ])
+
+                ]
+            ),
+            className=" mt-3"
+        )
     ]
 )
 
+app.layout = dbc.Container([
+    # html.H1("Fifa Players Analysis"),
+    navbar,
+
+    dbc.Tabs(
+        [
+            dbc.Tab(tab1_content, label="Tab 1"),
+            dbc.Tab(tab2_content, label="Tab 2"),
+        ]
+    ),
+],
+    fluid=True,
+)
 
 ###################################################   Callbacks   ######################################################
 
@@ -154,7 +241,7 @@ def radar_player(player1, player2):
     fig.update_layout(
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
         paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        font_color="white",
+        font_color="black",
         font_size= 15
     )
     return fig
