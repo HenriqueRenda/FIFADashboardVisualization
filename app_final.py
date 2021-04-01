@@ -431,8 +431,6 @@ app.layout = dbc.Container([
      Input(component_id='drop3', component_property='value'), 
      Input(component_id="age_slider", component_property="value")]
 )
-
-
 ###########Bar plot#######################################
 def bar_plot(input_value1,input_value2,input_value3, age):
 
@@ -475,7 +473,6 @@ def bar_plot(input_value1,input_value2,input_value3, age):
            go.Figure(data=data_bar2, layout=layout_bar2), \
            go.Figure(data=data_bar3, layout=layout_bar3)
 
-
 #----------------Callbacks for 2nd tab, clubs analysis----------------#
 @app.callback(
     [Output(component_id='club-graph1', component_property='figure'),
@@ -512,7 +509,6 @@ def plots_clubs(league,x_val,y_val):
         Input('player2', 'value')
     ]
 )
-
 ###############################################   radar plot   #####################################################
 def radar_player(player1, player2):
 
@@ -539,6 +535,8 @@ def radar_player(player1, player2):
     return fig
 
     ###############################################   table 1   ########################################################
+
+
 @app.callback(
     [
         Output('table1', 'data'),
@@ -550,8 +548,7 @@ def radar_player(player1, player2):
 
 def updateTable1(player1):
     table_updated1 = df[df['short_name'] == player1].to_dict('records')
-#    return table_updated1
-
+    #return table_updated1
     df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1]['potential'])
     df1_for_plot['name'] = player2
     gauge1 = go.Figure(go.Indicator(
@@ -570,6 +567,8 @@ def updateTable1(player1):
 
 
     ###############################################   table 2   ########################################################
+
+
 @app.callback(
     [
         Output('table2', 'data'),
@@ -597,8 +596,6 @@ def updateTable2(player2):
     barplot2.update_traces(marker_color='blue')
 
     return table_updated2, gauge2, barplot2
-
-
 
 
 
