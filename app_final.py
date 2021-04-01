@@ -276,7 +276,7 @@ tab1_content = html.Div(
 
                                 html.Br(),
 
-                                dbc.Row(html.Img(src='/assets/player_2.png', height="400px")
+                                dbc.Row(html.Img(src='/assets/player_2.png',className="playerImg"),
                                         ),
 
                                 html.Br(),
@@ -315,7 +315,7 @@ tab1_content = html.Div(
 
                                 html.Br(),
 
-                                dbc.Row(html.Img(src='/assets/player_2.png', height="400px")
+                                dbc.Row(html.Img(src='/assets/player_2.png',className="playerImg"),
                                         ),
 
                                 html.Br(),

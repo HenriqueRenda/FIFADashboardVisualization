@@ -2,3 +2,7 @@ body {
     height: 100%;
     background-color: #3A2657;
 }
+.playerImg {
+    margin: auto;
+    height: 250px;
+}
