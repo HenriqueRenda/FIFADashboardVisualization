@@ -6,3 +6,11 @@ body {
     margin: auto;
     height: 250px;
 }
+
+.age_slider {
+    margin: 5%;
+}
+
+#controls {
+    box-shadow: 5px 10px 8px #888888;
+}

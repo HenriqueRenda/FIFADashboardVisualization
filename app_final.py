@@ -230,6 +230,7 @@ controls = dbc.Card(
         ),
     ],
     body=True,
+    id="controls",
 )
 
 controls_club = dbc.Card(
@@ -345,7 +346,6 @@ tab1_content = html.Div(
 
                 ]
             ),
-            className=" mt-3"
         )
     ]
 )
@@ -355,7 +355,7 @@ tab2_content = html.Div(
         dbc.Card(    
             dbc.CardBody(
                 [
-                    html.H1("League and Clubs Analysis"),
+                    html.H1("League Analysis"),
                     html.Hr(),
                     dbc.Row(
                         [
@@ -376,15 +376,12 @@ tab2_content = html.Div(
                         align="center",
                     ),
                     
-                    dbc.Row(
-                        [
-                            dbc.Col(age_slider)
-                        ],
-                        align="center",
-                    ),
+                    dbc.Row([
+                        html.H5("Select Age:"),
+                        dbc.Col(age_slider,align = "center")
+                    ],className="m-5"),
                 ]
             ),
-            className=" mt-3" 
         ),
         html.Br(),
         dbc.Card(    
@@ -423,8 +420,8 @@ app.layout = dbc.Container([
 
         dbc.Tabs(
             [
-                dbc.Tab(tab1_content, label="Tab 1"),
-                dbc.Tab(tab2_content, label="Tab 2"),
+                dbc.Tab(tab1_content, label="Players"),
+                dbc.Tab(tab2_content, label="League & Club"),
             ]
         ),
     ],
@@ -450,35 +447,35 @@ def bar_plot(input_value1,input_value2,input_value3, age):
     data_bar1 = dict(
         type='bar',
         y=filtered_by_age_data.groupby('league_name').median()[input_value1].sort_values(ascending=False).head(5),
-        x=filtered_by_age_data['league_name'].unique(),
-        textposition='outside'
+        x=filtered_by_age_data['league_name'].unique()
     )
 
     data_bar2 = dict(
         type='bar',
         y=filtered_by_age_data.groupby('league_name').median()[input_value2].sort_values(ascending=False).head(5),
-        x=filtered_by_age_data['league_name'].unique(),
-        textposition='outside'
+        x=filtered_by_age_data['league_name'].unique()
     )
 
     data_bar3 = dict(
         type='bar',
         y=filtered_by_age_data.groupby('league_name').median()[input_value3].sort_values(ascending=False).head(5),
-        x=filtered_by_age_data['league_name'].unique(),
-        textposition='outside'
+        x=filtered_by_age_data['league_name'].unique()
     )
 
     layout_bar1 = dict(
-                      xaxis=dict(title='League'),
-                      yaxis=dict(title=input_value1))
+                      xaxis=dict(title='League', tickangle=45),
+                      yaxis=dict(title=input_value1),
+                      )
     
     layout_bar2 = dict(
-                      xaxis=dict(title='League'),
-                      yaxis=dict(title=input_value2))
+                      xaxis=dict(title='League',tickangle=45),
+                      yaxis=dict(title=input_value2),
+                      )
     
     layout_bar3 = dict(
-                      xaxis=dict(title='League'),
-                      yaxis=dict(title=input_value3))
+                      xaxis=dict(title='League',tickangle=45),
+                      yaxis=dict(title=input_value3),
+                      )
 
     return go.Figure(data=data_bar1, layout=layout_bar1), \
            go.Figure(data=data_bar2, layout=layout_bar2), \
