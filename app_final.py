@@ -277,7 +277,7 @@ tab1_content = html.Div(
 
                                 html.Br(),
 
-                                dbc.Row(html.Img(src='/assets/player_2.png',className="playerImg"),
+                                dbc.Row(html.Img(src='/assets/player_1.png',className="playerImg"),
                                         ),
 
                                 html.Br(),
@@ -316,7 +316,7 @@ tab1_content = html.Div(
 
                                 html.Br(),
 
-                                dbc.Row(html.Img(src='/assets/player_2.png',className="playerImg"),
+                                dbc.Row(html.Img(src='/assets/player_3.png',className="playerImg"),
                                         ),
 
                                 html.Br(),
@@ -342,10 +342,10 @@ tab1_content = html.Div(
                             ],
                             sm=3
                         )
-                    ])
-
+                    ]),
                 ]
             ),
+            className=" mt-3"
         )
     ]
 )
@@ -505,21 +505,32 @@ def plots_clubs(league,x_val,y_val):
     return fig1,fig2
 
 #----------------Callbacks for 1st tab, clubs analysis----------------#
+
 @app.callback(
-    Output('graph_example', 'figure'),
+    [
+        Output('graph_example', 'figure'),
+        Output('table1', 'data'),
+        Output('graph_example_1', 'figure'),
+        Output('graph_example_3', 'figure'),
+        Output('table2', 'data'),
+        Output('graph_example_2', 'figure'),
+        Output('graph_example_4', 'figure')
+    ],
     [
         Input('player1', 'value'),
         Input('player2', 'value')
     ]
 )
+
 ###############################################   radar plot   #####################################################
 
-def scatterpolar(player1, player2):
+def tab_1_function(player1, player2):
+
+    # scatterpolar
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skill_player].iloc[0])
     df1_for_plot.columns = ['score']
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0])
     df2_for_plot.columns = ['score']
-    # plot
     fig = go.Figure(data=go.Scatterpolar(
       r=df1_for_plot['score'],
       theta=df1_for_plot.index,
@@ -532,7 +543,6 @@ def scatterpolar(player1, player2):
           fill='toself',
           name= player2
     ))
-
     fig.update_layout(
       polar=dict(
           hole=0.2,
@@ -557,25 +567,10 @@ def scatterpolar(player1, player2):
             font_size= 15
     )
 
-    return fig
-
-    ###############################################   table 1   ########################################################
-
-
-@app.callback(
-    [
-        Output('table1', 'data'),
-        Output('graph_example_1', 'figure'),
-        Output('graph_example_3', 'figure')
-    ],
-    [Input('player1', 'value')]
-)
-
-def updateTable1(player1):
-    # table
+    # table 1
     table_updated1 = df[df['long_name'] == player1].to_dict('records')
 
-    # gauge plot
+    # gauge plot 1
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1]['potential'])
     df1_for_plot['name'] = player2
     gauge1 = go.Figure(go.Indicator(
@@ -584,32 +579,17 @@ def updateTable1(player1):
     mode="gauge+number",
     gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "red"}}))
 
-    # barplots
+    # barplot 1
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skills1].iloc[0].reset_index())
     df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
     df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
     barplot1 = px.bar(df1_for_plot, x='counts', y='skills', orientation='h')
     barplot1.update_traces(marker_color='red')
-    return table_updated1, gauge1, barplot1
 
-
-    ###############################################   table 2   ########################################################
-
-
-@app.callback(
-    [
-        Output('table2', 'data'),
-        Output('graph_example_2', 'figure'),
-        Output('graph_example_4', 'figure')
-    ],
-    [Input('player2', 'value')]
-)
-
-def updateTable2(player2):
-    # table
+    # table 2
     table_updated2 = df[df['long_name'] == player2].to_dict('records')
 
-    # gauge plot
+    # gauge plot 2
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2]['potential'])
     df2_for_plot['name'] = player2
     gauge2 = go.Figure(go.Indicator(
@@ -618,14 +598,15 @@ def updateTable2(player2):
     mode="gauge+number",
     gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "blue"}}))
 
-    # bar plot
+    # bar plot 2
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skills1].iloc[0].reset_index())
     df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
     df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
     barplot2 = px.bar(df2_for_plot,x='counts',y='skills',orientation='h')
     barplot2.update_traces(marker_color='blue')
 
-    return table_updated2, gauge2, barplot2
+    # outputs
+    return fig, table_updated1, gauge1, barplot1, table_updated2, gauge2, barplot2
 
 
 
