@@ -522,28 +522,50 @@ def plots_clubs(league,x_val,y_val):
     ]
 )
 ###############################################   radar plot   #####################################################
-def radar_player(player1, player2):
 
-    df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skill_player].iloc[0]).reset_index()
-    df1_for_plot['name'] = player1
-    df1_for_plot.columns = ['skill', 'score', 'name']
+def scatterpolar(player1, player2):
+    df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skill_player].iloc[0])
+    df1_for_plot.columns = ['score']
+    df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0])
+    df2_for_plot.columns = ['score']
+    # plot
+    fig = go.Figure(data=go.Scatterpolar(
+      r=df1_for_plot['score'],
+      theta=df1_for_plot.index,
+      fill='toself',
+        name = player1
+    ))
+    fig.add_trace(go.Scatterpolar(
+          r=df2_for_plot['score'],
+          theta=df2_for_plot.index,
+          fill='toself',
+          name= player2
+    ))
 
-    df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0]).reset_index()
-    df2_for_plot['name'] = player2
-    df2_for_plot.columns = ['skill', 'score', 'name']
-
-    df_for_plot = pd.concat([df1_for_plot, df2_for_plot], axis = 0)
-
-    colors = ['red', 'blue']
-    fig = px.line_polar(df_for_plot, r='score', theta="skill", color="name", line_close=True,
-                        color_discrete_sequence=colors)
-    fig.update_traces(fill='toself')
     fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        font_color="black",
-        font_size= 15
+      polar=dict(
+          hole=0.2,
+          bgcolor="white",
+     radialaxis=dict(
+          visible=True,
+            type='linear',
+            autotypenumbers='strict',
+            autorange=False,
+            range=[30, 100],
+            angle=90,
+            showline=False,
+    #         showgrid=False
+            gridcolor='black'
+        )
+      ),
+      showlegend=True,
+      template="plotly_dark",
+              plot_bgcolor = 'rgba(0, 0, 0, 0)',
+            paper_bgcolor = 'rgba(0, 0, 0, 0)',
+            font_color="black",
+            font_size= 15
     )
+
     return fig
 
     ###############################################   table 1   ########################################################
