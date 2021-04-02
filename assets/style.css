@@ -1,16 +1,45 @@
 body {
     height: 100%;
     background-color: #3A2657;
+    padding: 2%;
 }
 .playerImg {
     margin: auto;
     height: 250px;
 }
 
-.age_slider {
-    margin: 5%;
+#age_slider {
+    margin: 5% 5% 5% 0%;
+    padding: 1%;
 }
 
-#controls {
+.controls {
+    box-shadow: 5px 10px 8px #888888;
+    margin-bottom: 45%;
+}
+
+.LeagueBarPlot{
     box-shadow: 5px 10px 8px #888888;
 }
+
+.rc-slider-track {
+    background-color: #3A2657;
+  }
+  
+  .rc-slider-dot-active {  
+    border-color: #3A2657;
+    border: solid 2px #3A2657;
+  }
+  
+  .rc-slider-handle {
+    background-color: #3A2657;
+    border-color: #3A2657;
+  }
+  
+  .rc-slider-handle:hover {
+    border-color: #3A2657;
+  }
+  
+  .rc-slider-handle-active:active {
+    border-color: #3A2657;
+  }

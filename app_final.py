@@ -231,7 +231,7 @@ controls = dbc.Card(
         ),
     ],
     body=True,
-    id="controls",
+    className="controls",
 )
 
 controls_club = dbc.Card(
@@ -259,6 +259,7 @@ controls_club = dbc.Card(
         ),
     ],
     body=True,
+    className="controls",
 )
 
 tab1_content = html.Div(
@@ -363,24 +364,24 @@ tab2_content = html.Div(
                             dbc.Col(controls,sm=3),
 
                             dbc.Col(
-                                dcc.Graph(id='league-graph1'),sm=3
+                                dcc.Graph(id='league-graph1',className="LeagueBarPlot"),sm=3
                                 ),
 
                             dbc.Col(
-                                dcc.Graph(id='league-graph2'),sm=3
+                                dcc.Graph(id='league-graph2',className="LeagueBarPlot"),sm=3
                                 ),
 
                             dbc.Col(
-                                dcc.Graph(id='league-graph3'),sm=3
+                                dcc.Graph(id='league-graph3',className="LeagueBarPlot"),sm=3
                                 ),
                         ],
                         align="center",
                     ),
                     
                     dbc.Row([
-                        html.H5("Select Age:"),
+                        dbc.Label("Select Age:", style={'margin-left' : '5%', 'font-size': '20px'}),
                         dbc.Col(age_slider,align = "center")
-                    ],className="m-5"),
+                    ]),
                 ]
             ),
         ),
@@ -392,18 +393,13 @@ tab2_content = html.Div(
                     html.Hr(),  
                     dbc.Row(
                         [
-                        dbc.Col(controls_club,width=2),
+                        dbc.Col(controls_club,sm=2),
 
                         dbc.Col(
-                            dbc.Card([
-                                dcc.Graph(id='club-graph1')
-                            ]),width=5
+                            dcc.Graph(id='club-graph1',className="LeagueBarPlot"),sm=5
                         ),
-
                         dbc.Col(
-                            dbc.Card([
-                                dcc.Graph(id='club-graph2')
-                            ]),width=5
+                            dcc.Graph(id='club-graph2',className="LeagueBarPlot"),sm=5
                         )
                         ],
                         align="center",
