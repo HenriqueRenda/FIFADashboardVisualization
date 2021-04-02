@@ -166,16 +166,14 @@ navbar = dbc.Navbar(
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row(
                 [
-                    dbc.Col(html.Img(src='/assets/logo.png', height="150px")),
+                    dbc.Col(html.Img(src='/assets/logo_white3.png', height="130px")),
                 ],
                 align="center",
-                no_gutters=True,
+                #no_gutters=True,
             ),
             href="https://plot.ly",
         ),
     ],
-    color="#3A2657",
-    dark=True,
 )
 
 controls_player_1 = dbc.Card(
@@ -419,7 +417,7 @@ app.layout = dbc.Container([
             [
                 dbc.Tab(tab1_content, label="Players"),
                 dbc.Tab(tab2_content, label="League & Club"),
-            ]
+            ],    
         ),
     ],
     fluid=True,
