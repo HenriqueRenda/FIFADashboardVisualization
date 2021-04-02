@@ -22,6 +22,7 @@ nonusefulcolumns = ['sofifa_id','player_url','long_name','league_rank']
 nonusefulattributes = data.loc[:,'player_traits':]
 
 df = data.copy()
+df = df[df['player_positions'] != 'GK'] # filtering out all the goalkeepers
 df1 = df[df['age'] > 25] # dataset for players over 25
 df2 = df[df['age'] <= 25] # dataset for players under 25
 
@@ -29,43 +30,43 @@ df2 = df[df['age'] <= 25] # dataset for players under 25
 skill_player = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
 info_player = ['short_name','nationality', 'club_name', 'age', 'height_cm', 'weight_kg']
 skills1=['skill_curve','skill_dribbling','skill_fk_accuracy','skill_ball_control','skill_long_passing']
-player1 = 'L. Messi'
-player2 = 'K. Mbappé'
+player1 = 'Lionel Andrés Messi Cuccittini'
+player2 = 'Kylian Mbappé Lottin'
 
 
 ###################################################   Interactive Components   #########################################
 # choice of the players
 players_options_over_25 = []
 for i in df1.index:
-    players_options_over_25.append({'label': df1['long_name'][i], 'value':  df1['short_name'][i]})
+    players_options_over_25.append({'label': df1['long_name'][i], 'value':  df1['long_name'][i]})
 
 players_options_under_25 = []
 for i in df2.index:
-    players_options_under_25.append({'label': df2['long_name'][i], 'value':  df2['short_name'][i]})
+    players_options_under_25.append({'label': df2['long_name'][i], 'value':  df2['long_name'][i]})
 
 dropdown_player_over_25 = dcc.Dropdown(
         id='player1',
         options=players_options_over_25,
-        value='L. Messi'
+        value='Lionel Andrés Messi Cuccittini'
     )
 
 dropdown_player_under_25 = dcc.Dropdown(
         id='player2',
         options=players_options_under_25,
-        value='K. Mbappé'
+        value='Kylian Mbappé Lottin'
     )
 
 dashtable_1 = dash_table.DataTable(
         id='table1',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['short_name'] == player1].to_dict('records')
+        data=df[df['long_name'] == player1].to_dict('records')
     )
 
 
 dashtable_2 = dash_table.DataTable(
         id='table2',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['short_name'] == player2].to_dict('records')
+        data=df[df['long_name'] == player2].to_dict('records')
     )
 
 
@@ -518,28 +519,50 @@ def plots_clubs(league,x_val,y_val):
     ]
 )
 ###############################################   radar plot   #####################################################
-def radar_player(player1, player2):
 
-    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1][skill_player].iloc[0]).reset_index()
-    df1_for_plot['name'] = player1
-    df1_for_plot.columns = ['skill', 'score', 'name']
+def scatterpolar(player1, player2):
+    df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skill_player].iloc[0])
+    df1_for_plot.columns = ['score']
+    df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0])
+    df2_for_plot.columns = ['score']
+    # plot
+    fig = go.Figure(data=go.Scatterpolar(
+      r=df1_for_plot['score'],
+      theta=df1_for_plot.index,
+      fill='toself',
+        name = player1
+    ))
+    fig.add_trace(go.Scatterpolar(
+          r=df2_for_plot['score'],
+          theta=df2_for_plot.index,
+          fill='toself',
+          name= player2
+    ))
 
-    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2][skill_player].iloc[0]).reset_index()
-    df2_for_plot['name'] = player2
-    df2_for_plot.columns = ['skill', 'score', 'name']
-
-    df_for_plot = pd.concat([df1_for_plot, df2_for_plot], axis = 0)
-
-    colors = ['red', 'blue']
-    fig = px.line_polar(df_for_plot, r='score', theta="skill", color="name", line_close=True,
-                        color_discrete_sequence=colors)
-    fig.update_traces(fill='toself')
     fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        font_color="black",
-        font_size= 15
+      polar=dict(
+          hole=0.2,
+          bgcolor="white",
+     radialaxis=dict(
+          visible=True,
+            type='linear',
+            autotypenumbers='strict',
+            autorange=False,
+            range=[30, 100],
+            angle=90,
+            showline=False,
+    #         showgrid=False
+            gridcolor='black'
+        )
+      ),
+      showlegend=True,
+      template="plotly_dark",
+              plot_bgcolor = 'rgba(0, 0, 0, 0)',
+            paper_bgcolor = 'rgba(0, 0, 0, 0)',
+            font_color="black",
+            font_size= 15
     )
+
     return fig
 
     ###############################################   table 1   ########################################################
@@ -555,9 +578,11 @@ def radar_player(player1, player2):
 )
 
 def updateTable1(player1):
-    table_updated1 = df[df['short_name'] == player1].to_dict('records')
-    #return table_updated1
-    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1]['potential'])
+    # table
+    table_updated1 = df[df['long_name'] == player1].to_dict('records')
+
+    # gauge plot
+    df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1]['potential'])
     df1_for_plot['name'] = player2
     gauge1 = go.Figure(go.Indicator(
     domain={'x': [0, 1], 'y': [0, 1]},
@@ -566,7 +591,7 @@ def updateTable1(player1):
     gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "red"}}))
 
     # barplots
-    df1_for_plot = pd.DataFrame(df1[df1['short_name'] == player1][skills1].iloc[0].reset_index())
+    df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skills1].iloc[0].reset_index())
     df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
     df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
     barplot1 = px.bar(df1_for_plot, x='counts', y='skills', orientation='h')
@@ -587,9 +612,11 @@ def updateTable1(player1):
 )
 
 def updateTable2(player2):
-    table_updated2 = df[df['short_name'] == player2].to_dict('records')
+    # table
+    table_updated2 = df[df['long_name'] == player2].to_dict('records')
 
-    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2]['potential'])
+    # gauge plot
+    df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2]['potential'])
     df2_for_plot['name'] = player2
     gauge2 = go.Figure(go.Indicator(
     domain={'x': [0, 1], 'y': [0, 1]},
@@ -597,7 +624,8 @@ def updateTable2(player2):
     mode="gauge+number",
     gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "blue"}}))
 
-    df2_for_plot = pd.DataFrame(df2[df2['short_name'] == player2][skills1].iloc[0].reset_index())
+    # bar plot
+    df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skills1].iloc[0].reset_index())
     df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
     df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
     barplot2 = px.bar(df2_for_plot,x='counts',y='skills',orientation='h')
