@@ -59,14 +59,48 @@ dropdown_player_under_25 = dcc.Dropdown(
 dashtable_1 = dash_table.DataTable(
         id='table1',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['long_name'] == player1].to_dict('records')
+        data=df[df['long_name'] == player1].to_dict('records'),
+
+        style_cell_conditional=[
+            {
+                'if': {'column_id': c},
+                'textAlign': 'left'
+            } for c in ['Date', 'Region']
+        ],
+        style_data_conditional=[
+            {
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'
+            }
+        ],
+        style_header={
+            'backgroundColor': 'rgb(230, 230, 230)',
+            'fontWeight': 'bold'
+        }
     )
 
 
 dashtable_2 = dash_table.DataTable(
         id='table2',
         columns=[{"name": i, "id": i} for i in info_player],
-        data=df[df['long_name'] == player2].to_dict('records')
+        data=df[df['long_name'] == player2].to_dict('records'),
+        
+        style_cell_conditional=[
+            {
+                'if': {'column_id': c},
+                'textAlign': 'left'
+            } for c in ['Date', 'Region']
+        ],
+        style_data_conditional=[
+            {
+                'if': {'row_index': 'odd'},
+                'backgroundColor': 'rgb(248, 248, 248)'
+            }
+        ],
+        style_header={
+            'backgroundColor': 'rgb(230, 230, 230)',
+            'fontWeight': 'bold'
+        }
     )
 
 
@@ -187,6 +221,7 @@ controls_player_1 = dbc.Card(
         ),
     ],
     body=True,
+    className="controls_players",
 )
 
 controls_player_2 = dbc.Card(
@@ -200,6 +235,7 @@ controls_player_2 = dbc.Card(
         ),
     ],
     body=True,
+    className="controls_players",
 )
 
 controls = dbc.Card(
@@ -263,92 +299,40 @@ controls_club = dbc.Card(
 tab1_content = html.Div(
     [
         dbc.Card(
-            dbc.CardBody(
-                [
-                    html.H2('Player-Comparison Tab'),
+            dbc.CardBody([
+
+                    html.H1('Player Comparison'),
+                    html.Hr(),
 
                     dbc.Row([
-
-                        dbc.Col(
-                            [
-                                dbc.Row(
-                                    controls_player_1
-                                ),
-
-                                html.Br(),
-
-                                dbc.Row(html.Img(src='/assets/player_1.png',className="playerImg"),
-                                        ),
-
-                                html.Br(),
-
-                                dbc.Row(
-                                    dbc.Table(dashtable_1)
-                                ),
-
-                                dbc.Row([
-                                    dbc.Col([
-                                        dcc.Graph(id='graph_example_1')
-                                    ]
-                                    ),
-                                    dbc.Col([
-                                        dcc.Graph(id='graph_example_3')
-                                    ]
-                                    )
-                                ]
-                                ),
-                            ],
-                            sm=3,
-                            align="center"
-                        ),
-
+                        dbc.Col([
+                            dbc.Row(controls_player_1),
+                            dbc.Row(html.Img(src='/assets/player_1.png',className="playerImg"))
+                        ],sm=3),
                         dbc.Col(dcc.Graph(id='graph_example'), sm=6),
-
-                        # dbc.Col(add the man),
-
-                        dbc.Col(
-                            [
-                                dbc.Row(
-                                    [
-                                        controls_player_2
-                                    ]
-                                ),
-
-                                html.Br(),
-
-                                dbc.Row(html.Img(src='/assets/player_3.png',className="playerImg"),
-                                        ),
-
-                                html.Br(),
-
-                                dbc.Row(
-                                    [
-                                        dbc.Table(dashtable_2)
-                                    ]
-                                ),
-
-                                dbc.Row([
-                                        dbc.Col([
-                                                dcc.Graph(id='graph_example_2')
-                                            ]
-                                        ),
-                                        dbc.Col([
-                                                dcc.Graph(id='graph_example_4')
-                                            ]
-                                            )
-                                        ]
-                                ),
-
-                            ],
-                            sm=3
-                        )
+                        dbc.Col([
+                            dbc.Row(controls_player_2),
+                            dbc.Row(html.Img(src='/assets/player_3.png',className="playerImg"))
+                        ],sm=3),
+                    ]),
+                    dbc.Row([
+                        dbc.Col(dashtable_1,sm=6),
+                        dbc.Col(dashtable_2,sm=6),
+                    ]),
+                    dbc.Row([
+                        dbc.Col(dcc.Graph(id='graph_example_1'),sm=6),
+                        dbc.Col(dcc.Graph(id='graph_example_2'),sm=6),
+                    ]),
+                    dbc.Row([
+                        dbc.Col(dcc.Graph(id='graph_example_3'),sm=6),
+                        dbc.Col(dcc.Graph(id='graph_example_4'),sm=6),
                     ]),
                 ]
-            ),
-            className=" mt-3"
+            )
         )
     ]
-)
+),
+
 
 tab2_content = html.Div(
     [
@@ -415,9 +399,9 @@ app.layout = dbc.Container([
 
         dbc.Tabs(
             [
-                dbc.Tab(tab1_content, label="Players"),
-                dbc.Tab(tab2_content, label="League & Club"),
-            ],    
+                dbc.Tab(tab1_content, label="Players Comparison"),
+                dbc.Tab(tab2_content, label="League & Club Analysis"),
+            ], 
         ),
     ],
     fluid=True,
@@ -445,6 +429,7 @@ def bar_plot(input_value1,input_value2,input_value3, age):
         x=filtered_by_age_data['league_name'].unique()
     )
 
+
     data_bar2 = dict(
         type='bar',
         y=filtered_by_age_data.groupby('league_name').median()[input_value2].sort_values(ascending=False).head(5),
@@ -455,7 +440,7 @@ def bar_plot(input_value1,input_value2,input_value3, age):
         type='bar',
         y=filtered_by_age_data.groupby('league_name').median()[input_value3].sort_values(ascending=False).head(5),
         x=filtered_by_age_data['league_name'].unique()
-    )
+    ),
 
     layout_bar1 = dict(
                       xaxis=dict(title='League', tickangle=45),
@@ -577,14 +562,14 @@ def tab_1_function(player1, player2):
     domain={'x': [0, 1], 'y': [0, 1]},
     value=df1_for_plot.potential.iloc[0],
     mode="gauge+number",
-    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "red"}}))
+    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(133,61,246,1)"}}))
 
     # barplot 1
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skills1].iloc[0].reset_index())
     df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
     df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
     barplot1 = px.bar(df1_for_plot, x='counts', y='skills', orientation='h')
-    barplot1.update_traces(marker_color='red')
+    barplot1.update_traces(marker_color='rgba(133,61,246,1)')
 
     # table 2
     table_updated2 = df[df['long_name'] == player2].to_dict('records')
@@ -596,14 +581,14 @@ def tab_1_function(player1, player2):
     domain={'x': [0, 1], 'y': [0, 1]},
     value=df2_for_plot.potential.iloc[0],
     mode="gauge+number",
-    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "blue"}}))
+    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(189,34,250,1)"}}))
 
     # bar plot 2
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skills1].iloc[0].reset_index())
     df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
     df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
     barplot2 = px.bar(df2_for_plot,x='counts',y='skills',orientation='h')
-    barplot2.update_traces(marker_color='blue')
+    barplot2.update_traces(marker_color='rgba(189,34,250,1)')
 
     # outputs
     return fig, table_updated1, gauge1, barplot1, table_updated2, gauge2, barplot2
