@@ -550,24 +550,27 @@ def bar_plot(input_value1,input_value2,input_value3, age):
 
     layout_bar1 = dict(
                       xaxis=dict(title='League', tickangle=45),
-                      yaxis=dict(title=input_value1),
                       )
     
     layout_bar2 = dict(
                       xaxis=dict(title='League',tickangle=45),
-                      yaxis=dict(title=input_value2),
                       )
     
     layout_bar3 = dict(
                       xaxis=dict(title='League',tickangle=45),
-                      yaxis=dict(title=input_value3),
                       )
     fig1 = go.Figure(data=data_bar1, layout=layout_bar1)
     fig1.update_traces(marker_color='rgb(133,61,246)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
+    fig1.update_layout(title_text=input_value1,title_x=0.5)
+
     fig2 = go.Figure(data=data_bar2, layout=layout_bar2)
     fig2.update_traces(marker_color='rgb(158,50,249)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
+    fig2.update_layout(title_text=input_value2,title_x=0.5)
+
     fig3 = go.Figure(data=data_bar3, layout=layout_bar3)
     fig3.update_traces(marker_color='rgb(189,34,250)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
+    fig3.update_layout(title_text=input_value3,title_x=0.5)
+
     return fig1,fig2,fig3
            
 
