@@ -258,7 +258,7 @@ controls = dbc.Card(
     [
         dbc.FormGroup(
             [
-                html.Label('Choose a Attribute:'),
+                html.Label('Choose an Attribute:'),
                 html.Br(),
                 metric1_dropdown,
             ]
@@ -266,7 +266,7 @@ controls = dbc.Card(
 
         dbc.FormGroup(
             [
-                html.Label('Choose a Attribute:'),
+                html.Label('Choose an Attribute:'),
                 html.Br(),
                 metric2_dropdown,
             ]
@@ -274,7 +274,7 @@ controls = dbc.Card(
 
         dbc.FormGroup(
             [
-                html.Label('Choose a Attribute:'),
+                html.Label('Choose an Attribute:'),
                 html.Br(),
                 metric3_dropdown
             ]
