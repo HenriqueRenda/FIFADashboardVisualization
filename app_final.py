@@ -388,7 +388,7 @@ cards_3 = dbc.CardDeck(
                     dcc.Graph(id='graph_example_1'),
                 ]
             )
-        ), 
+        ,className='attributes_card'), 
         dbc.Card(
             dbc.CardBody(
                 [
@@ -396,7 +396,7 @@ cards_3 = dbc.CardDeck(
                     dcc.Graph(id='graph_example_3'),
                 ]
             )
-        ),  
+        ,className='attributes_card'),  
     ]
 )
 cards_4 = dbc.CardDeck(
@@ -408,7 +408,7 @@ cards_4 = dbc.CardDeck(
                     dcc.Graph(id='graph_example_4'),
                 ]
             )
-        ), 
+        ,className='attributes_card'), 
         dbc.Card(
             dbc.CardBody(
                 [
@@ -416,7 +416,7 @@ cards_4 = dbc.CardDeck(
                     dcc.Graph(id='graph_example_2'),
                 ]
             )
-        ),  
+        ,className='attributes_card'),  
     ]
 )
 
@@ -760,9 +760,8 @@ def tab_1_function(player1, player2):
         mode="gauge+number",
         gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "#5000bf"}}))
     gauge1.update_layout(
-        width = 300,
         height = 200,
-        margin=dict(l=40, r=40, t=40, b=40),
+        margin=dict(l=10, r=10, t=20, b=0),
         showlegend=False,
         template="plotly_dark",
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
@@ -777,9 +776,8 @@ def tab_1_function(player1, player2):
     barplot1 = px.bar(df1_for_plot, x='skills', y='counts')
     barplot1.update_traces(marker_color='#5000bf')
     barplot1.update_layout(
-        width = 300,
         height = 300,
-        margin=dict(l=50, r=30, t=50, b=50),
+        margin=dict(l=10, r=10, t=20, b=0),
         showlegend=False,
         #yaxis={'visible': False, 'showticklabels': True},
         template="plotly_dark",
@@ -800,9 +798,8 @@ def tab_1_function(player1, player2):
         mode="gauge+number",
         gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgb(255,171,0)"}}))
     gauge2.update_layout(
-        width = 300,
         height = 200,
-        margin=dict(l=40, r=40, t=40, b=40),
+        margin=dict(l=10, r=10, t=20, b=0),
         showlegend=False,
         template="plotly_dark",
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
@@ -817,9 +814,8 @@ def tab_1_function(player1, player2):
     barplot2 = px.bar(df2_for_plot,x='skills',y='counts')
     barplot2.update_traces(marker_color='rgb(255,171,0)')
     barplot2.update_layout(
-    width = 300,
     height = 300,
-    margin=dict(l=50, r=50, t=50, b=50),
+    margin=dict(l=10, r=10, t=20, b=0),
     showlegend=False,
     template="plotly_dark",
     plot_bgcolor = 'rgba(0, 0, 0, 0)',
