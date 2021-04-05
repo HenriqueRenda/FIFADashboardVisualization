@@ -588,7 +588,7 @@ def plots_clubs(league,x_val,y_val):
     # Scatter plot
     plot_df = data[data['league_name'] == league].sort_values('overall',ascending = False).head(100)
     fig1 = px.scatter(data_frame  = plot_df, x=x_val, y=y_val,color="isOver25text", size = 'potential',
-                        color_discrete_sequence=['#853df6','#efff45'], hover_name ='short_name',
+                        color_discrete_sequence=['#5000bf','rgb(255,171,0)'], hover_name ='short_name',
                         hover_data={"isOver25text":False,'age':True,'club_name':True,'overall':True,'potential':True,'player_positions':True},
                         title = ('Top 100 players with highest overall rating in '+league))    
     fig1.update_layout(
@@ -617,8 +617,9 @@ def plots_clubs(league,x_val,y_val):
     x = plot_df['club_name']
     y = plot_df.iloc[:,-2:].div(plot_df.iloc[:,-2:].sum(axis=1), axis=0)
     fig2 = go.Figure()
-    fig2.add_trace(go.Bar(y=x,x=y[False],name='Under 25',orientation='h', marker=dict(color='#efff45',line=dict(color='DarkSlateGrey', width=1.1))))
-    fig2.add_trace(go.Bar(y=x,x=y[True],name='Over 25',orientation='h', marker=dict(color='#853df6',line=dict(color='DarkSlateGrey', width=1.1))))
+    fig2.add_trace(go.Bar(y=x,x=y[True],name='Over 25',orientation='h', marker=dict(color='#5000bf',line=dict(color='DarkSlateGrey', width=1.1))))
+    fig2.add_trace(go.Bar(y=x,x=y[False],name='Under 25',orientation='h', marker=dict(color='rgb(255,171,0)',line=dict(color='DarkSlateGrey', width=1.1))))
+
     fig2.update_yaxes(tickfont = dict(size=10))
     fig2.update_layout(barmode='stack', 
                         title = dict(text ='Players over 25 and under 25 years old by club',
@@ -682,7 +683,7 @@ def tab_1_function(player1, player2):
         r=df1_for_plot['score'],
         theta=df1_for_plot.index,
         fill='toself', 
-        #marker_color = '#711bf7',   
+        marker_color = 'rgb(45,0,198)',   
         opacity =1, 
         hoverinfo = "text" ,
         name = text_scores_1,
@@ -692,7 +693,7 @@ def tab_1_function(player1, player2):
         r=df2_for_plot['score'],
         theta=df2_for_plot.index,
         fill='toself',
-        #marker_color = '#dee600',
+        marker_color = 'rgb(255,171,0)',
         hoverinfo = "text" ,
         name= text_scores_2,
         text  = [df2_for_plot.index[i] +' = ' + str(df2_for_plot['score'][i]) for i in range(len(df2_for_plot))]
@@ -735,7 +736,7 @@ def tab_1_function(player1, player2):
         domain={'x': [0, 1], 'y': [0, 1]},
         value=df1_for_plot.potential.iloc[0],
         mode="gauge+number",
-        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(133,61,246,1)"}}))
+        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "#5000bf"}}))
     gauge1.update_layout(
         width = 300,
         height = 200,
@@ -752,7 +753,7 @@ def tab_1_function(player1, player2):
     df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
     df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
     barplot1 = px.bar(df1_for_plot, x='skills', y='counts')
-    barplot1.update_traces(marker_color='rgba(133,61,246,1)')
+    barplot1.update_traces(marker_color='#5000bf')
     barplot1.update_layout(
         width = 300,
         height = 300,
@@ -775,7 +776,7 @@ def tab_1_function(player1, player2):
         domain={'x': [0, 1], 'y': [0, 1]},
         value=df2_for_plot.potential.iloc[0],
         mode="gauge+number",
-        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(189,34,250,1)"}}))
+        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgb(255,171,0)"}}))
     gauge2.update_layout(
         width = 300,
         height = 200,
@@ -792,7 +793,7 @@ def tab_1_function(player1, player2):
     df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
     df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
     barplot2 = px.bar(df2_for_plot,x='skills',y='counts')
-    barplot2.update_traces(marker_color='rgba(189,34,250,1)')
+    barplot2.update_traces(marker_color='rgb(255,171,0)')
     barplot2.update_layout(
     width = 300,
     height = 300,
