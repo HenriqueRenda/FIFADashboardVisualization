@@ -61,7 +61,8 @@ dashtable_1 = dash_table.DataTable(
         id='table1',
         columns=[{"name": col, "id": info_player[idx]} for (idx, col) in enumerate(labels_table)],
         data=df[df['long_name'] == player1].to_dict('records'),
-        style_cell={'textAlign': 'left'},
+        style_cell={'textAlign': 'left',
+                    'font_size': '14px'},
         style_data_conditional=[
             {
                 'if': {'row_index': 'odd'},
@@ -80,6 +81,8 @@ dashtable_2 = dash_table.DataTable(
         # columns=[{"name": i, "id": i} for i in info_player[::-1]],
         columns=[{"name": col, "id": info_player[::-1][idx]} for (idx, col) in enumerate(labels_table[::-1])],
         data=df[df['long_name'] == player2].to_dict('records'),
+        style_cell={'textAlign': 'right',
+            'font_size': '14px'},
         style_data_conditional=[
             {
                 'if': {'row_index': 'odd'},
