@@ -112,15 +112,35 @@ options = [{'label': 'Overall', 'value': 'overall'},
            {'label': 'Dribbling', 'value': 'dribbling'},
            {'label': 'Defending', 'value': 'defending'},
            {'label': 'Physic', 'value': 'physic'}]
-leagues = [ {'label':'Premier League', 'value':'English Premier League'},
-            {'label':'Ligue 1', 'value':'French Ligue 1'},
+top_10_leagues = ['Spain Primera Division', 'Italian Serie A', 'Spain Primera Division',
+'German 1. Bundesliga', 'French Ligue 1', 'English Premier League',
+'Portuguese Liga ZON SAGRES', 'Belgian Jupiler Pro League',
+'Holland Eredivisie', 'Russian Premier League']
+
+
+
+leagues = [ {'label':'Premier League', 'value':'English Premier League'},          
             {'label':'Bundesliga', 'value':'German 1. Bundesliga'},
             {'label':'Serie A', 'value':'Italian Serie A'},
-            {'label':'La Liga', 'value':'Spain Primera Division'}]
+            {'label':'Liga ZON SAGRES', 'value':'Portuguese Liga ZON SAGRES'},
+            {'label':'La Liga', 'value':'Spain Primera Division'},
+            {'label':'Ligue 1', 'value':'French Ligue 1'},
+            {'label':'Jupiler Pro League', 'value':'Belgian Jupiler Pro League'},
+            {'label':'Eredivisie', 'value':'Holland Eredivisie'},
+            {'label':'Russian Premier League', 'value':'Russian Premier League'}]
+
 value_x =[{'label': 'Overall', 'value': 'overall'},
           {'label': 'Potential', 'value': 'potential'},
           {'label': 'Value', 'value': 'value_eur'},
-          {'label': 'Wage', 'value': 'wage_eur'},]
+          {'label': 'Wage', 'value': 'wage_eur'},
+          {'label': 'Height', 'value': 'height_cm'},
+          {'label': 'Weight', 'value': 'weight_kg'},
+          {'label': 'Pace', 'value': 'pace'},
+          {'label': 'Shooting', 'value': 'shooting'},
+          {'label': 'Passing', 'value': 'passing'},
+          {'label': 'Dribbling', 'value': 'dribbling'},
+          {'label': 'Defending', 'value': 'defending'},
+          {'label': 'Physic', 'value': 'physic'}]
 
 
 
@@ -189,12 +209,14 @@ navbar = dbc.Navbar(
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row(
                 [
-                    dbc.Col(html.Img(src='/assets/logo_white3.png', height="130px")),
+                    dbc.Col(html.Img(src='/assets/logo_white3.png', height="130px"),width=3),
+                    dbc.Col(
+                        [html.Label("FOOTBALL PLAYER GENERATION",id = "label1"),
+                         html.Label("Explore the differences between the old-school and the new talents",id = "label2")],width=8)
                 ],
-                align="center",
+                align="between",
                 #no_gutters=True,
             ),
-            href="https://plot.ly",
         ),
     ],
 )
