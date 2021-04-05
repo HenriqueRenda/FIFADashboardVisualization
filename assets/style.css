@@ -21,6 +21,13 @@ body {
     height: 250px;
 }
 
+.card-title2 {
+    text-align: end;
+}
+.card_info2 {
+    text-align: end;
+}
+
 #age_slider {
     margin: 5% 5% 5% 0%;
     padding: 1%;

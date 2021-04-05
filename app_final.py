@@ -78,7 +78,7 @@ dashtable_1 = dash_table.DataTable(
 dashtable_2 = dash_table.DataTable(
         id='table2',
         # columns=[{"name": i, "id": i} for i in info_player[::-1]],
-        columns=[{"name": col, "id": info_player[idx]} for (idx, col) in enumerate(labels_table)],
+        columns=[{"name": col, "id": info_player[::-1][idx]} for (idx, col) in enumerate(labels_table[::-1])],
         data=df[df['long_name'] == player2].to_dict('records'),
         style_data_conditional=[
             {
@@ -290,32 +290,32 @@ cards_1 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Position", className="card-title"),
-                    html.Div(id="P_position1"),
+                    html.Div("Position", className="card-title1"),
+                    html.Div(id="P_position1",className="card_info1"),
                 ]
             )
         ),
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Value", className="card-title"),
-                    html.Div(id="P_value1"),
+                    html.Div("Value", className="card-title1"),
+                    html.Div(id="P_value1",className="card_info1"),
                 ]
             )
         ),        
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Skill moves", className="card-title"),
-                    html.Div(id="P_skill1"),
+                    html.Div("Skill moves", className="card-title1"),
+                    html.Div(id="P_skill1",className="card_info1"),
                 ]
             )
         ),
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Prefer foot", className="card-title"),
-                    html.Div(id="P_foot1"),
+                    html.Div("Prefer foot", className="card-title1"),
+                    html.Div(id="P_foot1",className="card_info1"),
                 ]
             )
         ),        
@@ -326,32 +326,32 @@ cards_2 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Prefer foot", className="card-title"),
-                    html.Div(id="P_foot2"),
+                    html.Div("Prefer foot", className="card-title2"),
+                    html.Div(id="P_foot2",className="card_info2"),
                 ]
             )
         ), 
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Skill moves", className="card-title"),
-                    html.Div(id="P_skill2"),
+                    html.Div("Skill moves", className="card-title2"),
+                    html.Div(id="P_skill2",className="card_info2"),
                 ]
             )
         ),    
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Value", className="card-title"),
-                    html.Div(id="P_value2"),
+                    html.Div("Value", className="card-title2"),
+                    html.Div(id="P_value2",className="card_info2"),
                 ]
             )
         ),                       
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Position", className="card-title"),
-                    html.Div(id="P_position2"),
+                    html.Div("Position", className="card-title2"),
+                    html.Div(id="P_position2",className="card_info2"),
                 ]
             )
         ),     
@@ -362,7 +362,7 @@ cards_3 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Overall", className="card-title"),
+                    html.Div("Overall", className="card-title1"),
                     dcc.Graph(id='graph_example_1'),
                 ]
             )
@@ -370,7 +370,7 @@ cards_3 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Skills", className="card-title"),
+                    html.Div("Skills", className="card-title1"),
                     dcc.Graph(id='graph_example_3'),
                 ]
             )
@@ -382,7 +382,7 @@ cards_4 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Skills", className="card-title"),
+                    html.Div("Skills", className="card-title2"),
                     dcc.Graph(id='graph_example_4'),
                 ]
             )
@@ -390,7 +390,7 @@ cards_4 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Overall", className="card-title"),
+                    html.Div("Overall", className="card-title2"),
                     dcc.Graph(id='graph_example_2'),
                 ]
             )
@@ -436,6 +436,8 @@ tab1_content = html.Div(
         )
     ]
 ),
+
+
 
 
 tab2_content = html.Div(
@@ -751,8 +753,9 @@ def tab_1_function(player1, player2):
     barplot1.update_layout(
         width = 300,
         height = 300,
-        margin=dict(l=50, r=50, t=50, b=50),
+        margin=dict(l=50, r=30, t=50, b=50),
         showlegend=False,
+        #yaxis={'visible': False, 'showticklabels': True},
         template="plotly_dark",
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
         paper_bgcolor = 'rgba(0, 0, 0, 0)',
