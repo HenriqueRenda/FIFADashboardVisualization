@@ -112,12 +112,22 @@ options = [{'label': 'Overall', 'value': 'overall'},
            {'label': 'Dribbling', 'value': 'dribbling'},
            {'label': 'Defending', 'value': 'defending'},
            {'label': 'Physic', 'value': 'physic'}]
+top_10_leagues = ['Spain Primera Division', 'Italian Serie A', 'Spain Primera Division',
+'German 1. Bundesliga', 'French Ligue 1', 'English Premier League',
+'Portuguese Liga ZON SAGRES', 'Belgian Jupiler Pro League',
+'Holland Eredivisie', 'Russian Premier League']
 
-leagues = [ {'label':'Premier League', 'value':'English Premier League'},
-            {'label':'Ligue 1', 'value':'French Ligue 1'},
+
+
+leagues = [ {'label':'Premier League', 'value':'English Premier League'},          
             {'label':'Bundesliga', 'value':'German 1. Bundesliga'},
             {'label':'Serie A', 'value':'Italian Serie A'},
-            {'label':'La Liga', 'value':'Spain Primera Division'}]
+            {'label':'Liga ZON SAGRES', 'value':'Portuguese Liga ZON SAGRES'},
+            {'label':'La Liga', 'value':'Spain Primera Division'},
+            {'label':'Ligue 1', 'value':'French Ligue 1'},
+            {'label':'Jupiler Pro League', 'value':'Belgian Jupiler Pro League'},
+            {'label':'Eredivisie', 'value':'Holland Eredivisie'},
+            {'label':'Russian Premier League', 'value':'Russian Premier League'}]
 
 value_x =[{'label': 'Overall', 'value': 'overall'},
           {'label': 'Potential', 'value': 'potential'},
@@ -204,7 +214,7 @@ navbar = dbc.Navbar(
                         [html.Label("FOOTBALL PLAYER GENERATION",id = "label1"),
                          html.Label("Explore the differences between the old-school and the new talents",id = "label2")],width=8)
                 ],
-                align="center",
+                align="between",
                 #no_gutters=True,
             ),
         ),
