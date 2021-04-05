@@ -33,6 +33,17 @@ body {
     padding: 1%;
 }
 
+#label1 {
+    color:aliceblue;
+    font-size: 200%;
+    
+}
+#label2 {
+    color:aliceblue;
+    font-size: 100%;
+    
+}
+
 .controls {
     box-shadow: 5px 10px 8px #888888;
     margin-bottom: 45%;
