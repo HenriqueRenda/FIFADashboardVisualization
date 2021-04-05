@@ -587,6 +587,7 @@ def plots_clubs(league,x_val,y_val):
                         hover_data={"isOver25text":False,'age':True,'club_name':True,'overall':True,'potential':True,'player_positions':True},
                         title = ('Top 100 players with highest overall rating in '+league))    
     fig1.update_layout(
+        title = dict(font = dict(size =14)),
         legend=dict(title = dict(text ="Age"),
                     orientation="h",
                     yanchor="bottom",
@@ -614,7 +615,9 @@ def plots_clubs(league,x_val,y_val):
     fig2.add_trace(go.Bar(y=x,x=y[False],name='Under 25',orientation='h', marker=dict(color='#efff45',line=dict(color='DarkSlateGrey', width=1.1))))
     fig2.add_trace(go.Bar(y=x,x=y[True],name='Over 25',orientation='h', marker=dict(color='#853df6',line=dict(color='DarkSlateGrey', width=1.1))))
     fig2.update_yaxes(tickfont = dict(size=10))
-    fig2.update_layout(barmode='stack', title='Players over 25 and under 25 years old by club',
+    fig2.update_layout(barmode='stack', 
+                        title = dict(text ='Players over 25 and under 25 years old by club',
+                                     font = dict(size =14)),
                         plot_bgcolor = 'rgba(0, 0, 0, 0)',
                         paper_bgcolor = 'rgba(0, 0, 0, 0)',    
                         legend=dict(title = dict(text ="Age of players"),
