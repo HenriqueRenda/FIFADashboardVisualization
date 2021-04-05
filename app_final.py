@@ -791,6 +791,7 @@ def tab_1_function(player1, player2):
         font_color="black",
         font_size= 10
     )
+    barplot1.update_yaxes(range=[1,100])
     # table 2
     table_updated2 = df[df['long_name'] == player2].to_dict('records')
 
@@ -828,6 +829,7 @@ def tab_1_function(player1, player2):
     font_color="black",
     font_size= 10
     )
+    barplot2.update_yaxes(range=[1,100])
     # cards
     p_pos_1 = df1[df1['long_name'] == player1]["team_position"]
     p_value_1 = str(df1[df1['long_name'] == player1]["value_eur"].values[0] / 1000000) +" M Euro"
