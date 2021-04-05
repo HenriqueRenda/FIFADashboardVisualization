@@ -189,15 +189,15 @@ age_slider = dcc.RangeSlider(
                             value=[data['age'].min(), data['age'].max()],
                             step=1,
                             marks={16: '16',
-                                22: '20',
-                                26: '24',
-                                30: '28',
-                                34: '32',
-                                38: '36',
-                                42: '40',
-                                46: '44',
-                                50: '48',
-                                54: '52'}
+                                20: '20',
+                                24: '24',
+                                28: '28',
+                                32: '32',
+                                36: '36',
+                                40: '40',
+                                44: '44',
+                                48: '48',   
+                                52: '52'}
                         )
 
 ########Dash App Layout##########################
@@ -504,7 +504,7 @@ tab2_content = html.Div(
         dbc.Card(    
             dbc.CardBody(
                 [
-                    html.H1("Clubs Analysis"),
+                    html.H1("Club Analysis"),
                     html.Hr(),  
                     dbc.Row(
                         [
@@ -575,7 +575,7 @@ def bar_plot(input_value1,input_value2,input_value3, age):
         x=filtered_by_age_data['league_name'].unique()
     ),
 
-    layout_bar1 = dict(
+    layout_bar1 = dict(                    
                       xaxis=dict(title='League', tickangle=45),
                       )
     
@@ -588,16 +588,29 @@ def bar_plot(input_value1,input_value2,input_value3, age):
                       )
     fig1 = go.Figure(data=data_bar1, layout=layout_bar1)
     fig1.update_traces(marker_color='rgb(133,61,246)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
-    fig1.update_layout(title_text=input_value1,title_x=0.5)
-
+    fig1.update_layout(title_text=input_value1.capitalize(),title_x=0.5,
+                       margin=dict(l=70, r=40, t=60, b=40),
+                       plot_bgcolor = 'rgba(0, 0, 0, 0)',
+                       paper_bgcolor = 'rgba(0, 0, 0, 0)',
+                       xaxis = dict(gridcolor= "#e5e6dc",gridwidth= 0.5),
+                       yaxis = dict(tickcolor= "#e5e6dc",tickwidth= 5,gridcolor= "#e5e6dc",gridwidth= 0.5))
+    
     fig2 = go.Figure(data=data_bar2, layout=layout_bar2)
     fig2.update_traces(marker_color='rgb(158,50,249)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
-    fig2.update_layout(title_text=input_value2,title_x=0.5)
-
+    fig2.update_layout(title_text=input_value2.capitalize(),title_x=0.5,
+                       margin=dict(l=70, r=40, t=60, b=40),
+                       plot_bgcolor = 'rgba(0, 0, 0, 0)',
+                       paper_bgcolor = 'rgba(0, 0, 0, 0)',
+                       xaxis = dict(gridcolor= "#e5e6dc",gridwidth= 0.5),
+                       yaxis = dict(tickcolor= "#e5e6dc",tickwidth= 5,gridcolor= "#e5e6dc",gridwidth= 0.5))
     fig3 = go.Figure(data=data_bar3, layout=layout_bar3)
     fig3.update_traces(marker_color='rgb(189,34,250)', marker_line_color='rgb(133,61,246)', marker_line_width=0.8, opacity=0.9)
-    fig3.update_layout(title_text=input_value3,title_x=0.5)
-
+    fig3.update_layout(title_text=input_value3.capitalize(),title_x=0.5,
+                       margin=dict(l=70, r=40, t=60, b=40),
+                       plot_bgcolor = 'rgba(0, 0, 0, 0)',
+                       paper_bgcolor = 'rgba(0, 0, 0, 0)',
+                       xaxis = dict(gridcolor= "#e5e6dc",gridwidth= 0.5),
+                       yaxis = dict(tickcolor= "#e5e6dc",tickwidth= 5,gridcolor= "#e5e6dc",gridwidth= 0.5))
     return fig1,fig2,fig3
            
 
@@ -620,12 +633,13 @@ def plots_clubs(league,x_val,y_val):
                         title = ('Top 100 players with highest overall rating in '+league))    
     fig1.update_layout(
         title = dict(font = dict(size =14)),
-        legend=dict(title = dict(text ="Age"),
+        legend=dict(title = dict(text ="Age of players"),
                     orientation="h",
                     yanchor="bottom",
                     y=1,
                     xanchor="right",
                     x=1),
+        margin=dict(l=70, r=30, t=100, b=70),
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
         paper_bgcolor = 'rgba(0, 0, 0, 0)',
         xaxis = dict(gridcolor= "#e5e6dc",gridwidth= 0.5),
@@ -658,7 +672,8 @@ def plots_clubs(league,x_val,y_val):
                                         yanchor="bottom",
                                         y=1,
                                         xanchor="right",
-                                        x=0.95),)
+                                        x=0.95),
+                        margin=dict(r=30, t=100, b=70),)
     return fig1,fig2
 
 #----------------Callbacks for 1st tab, clubs analysis----------------#
@@ -696,12 +711,12 @@ def tab_1_function(player1, player2):
     df1_for_plot.columns = ['score']
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0])
     df2_for_plot.columns = ['score']
-    list_scores = [df1_for_plot.index[i] +' = ' + str(df1_for_plot['score'][i]) for i in range(len(df1_for_plot))]
+    list_scores = [df1_for_plot.index[i].capitalize() +' = ' + str(df1_for_plot['score'][i]) for i in range(len(df1_for_plot))]
     text_scores_1 = player1
     for i in list_scores:
         text_scores_1 += '<br>' + i
 
-    list_scores = [df2_for_plot.index[i] +' = ' + str(df2_for_plot['score'][i]) for i in range(len(df2_for_plot))]
+    list_scores = [df2_for_plot.index[i].capitalize() +' = ' + str(df2_for_plot['score'][i]) for i in range(len(df2_for_plot))]
     text_scores_2 = player2
     for i in list_scores:
         text_scores_2 += '<br>' + i
