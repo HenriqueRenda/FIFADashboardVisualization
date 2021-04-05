@@ -214,8 +214,10 @@ navbar = dbc.Navbar(
                 [
                     dbc.Col(html.Img(src='/assets/logo_white3.png', height="130px"),width=3),
                     dbc.Col(
-                        [html.Label("FOOTBALL PLAYER GENERATION",id = "label1"),
-                         html.Label("Explore the differences between the old-school and the new talents",id = "label2")],width=8)
+                        [html.Label("FOOTBALL PLAYER GENERATIONS",id = "label1"),
+                         html.Label("Explore the differences between old-school and new talents",className = "label2"),
+                         html.Br(),
+                         html.Label("Dashboard created by: Catarina Pinheiro, Henrique Renda, Nguyen Phuc, Lorenzo Pigozzi",className = "label2",style={'margin-bottom':'.34rem'})],width=8)
                 ],
                 align="between",
                 #no_gutters=True,

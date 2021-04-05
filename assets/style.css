@@ -39,10 +39,12 @@ body {
 
 #label1 {
     color:aliceblue;
-    font-size: 200%;
+    font-size: 250%;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
     
 }
-#label2 {
+.label2 {
     color:aliceblue;
     font-size: 100%;
     
