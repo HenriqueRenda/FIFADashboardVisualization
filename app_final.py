@@ -202,7 +202,7 @@ age_slider = dcc.RangeSlider(
 
 ########Dash App Layout##########################
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__,    external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server = app.server
 
