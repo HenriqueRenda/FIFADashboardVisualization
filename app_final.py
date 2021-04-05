@@ -294,7 +294,7 @@ cards_1 = dbc.CardDeck(
                     html.Div(id="P_position1",className="card_info1"),
                 ]
             )
-        ),
+        ,className='attributes_card'),
         dbc.Card(
             dbc.CardBody(
                 [
@@ -302,7 +302,7 @@ cards_1 = dbc.CardDeck(
                     html.Div(id="P_value1",className="card_info1"),
                 ]
             )
-        ),        
+        ,className='attributes_card'),        
         dbc.Card(
             dbc.CardBody(
                 [
@@ -310,7 +310,7 @@ cards_1 = dbc.CardDeck(
                     html.Div(id="P_skill1",className="card_info1"),
                 ]
             )
-        ),
+        ,className='attributes_card'),
         dbc.Card(
             dbc.CardBody(
                 [
@@ -318,7 +318,7 @@ cards_1 = dbc.CardDeck(
                     html.Div(id="P_foot1",className="card_info1"),
                 ]
             )
-        ),        
+        ,className='attributes_card'),        
     ]
 )
 cards_2 = dbc.CardDeck(
@@ -330,7 +330,7 @@ cards_2 = dbc.CardDeck(
                     html.Div(id="P_foot2",className="card_info2"),
                 ]
             )
-        ), 
+        ,className='attributes_card'), 
         dbc.Card(
             dbc.CardBody(
                 [
@@ -338,7 +338,7 @@ cards_2 = dbc.CardDeck(
                     html.Div(id="P_skill2",className="card_info2"),
                 ]
             )
-        ),    
+        ,className='attributes_card'),    
         dbc.Card(
             dbc.CardBody(
                 [
@@ -346,7 +346,7 @@ cards_2 = dbc.CardDeck(
                     html.Div(id="P_value2",className="card_info2"),
                 ]
             )
-        ),                       
+        ,className='attributes_card'),                       
         dbc.Card(
             dbc.CardBody(
                 [
@@ -354,7 +354,7 @@ cards_2 = dbc.CardDeck(
                     html.Div(id="P_position2",className="card_info2"),
                 ]
             )
-        ),     
+        ,className='attributes_card'),     
     ]
 )
 cards_3 = dbc.CardDeck(
