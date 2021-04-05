@@ -29,6 +29,7 @@ df2 = df[df['age'] <= 25] # dataset for players under 25
 # variables for the analysis
 skill_player = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physic']
 info_player = ['short_name','nationality', 'club_name', 'age', 'height_cm', 'weight_kg']
+labels_table = ['Player', 'Nationality', 'Club', 'Age', 'Height (cm)', 'Weight (kg)']
 skills1=['skill_curve','skill_dribbling','skill_fk_accuracy','skill_ball_control','skill_long_passing']
 player1 = 'Lionel Andrés Messi Cuccittini'
 player2 = 'Kylian Mbappé Lottin'
@@ -58,7 +59,7 @@ dropdown_player_under_25 = dcc.Dropdown(
 
 dashtable_1 = dash_table.DataTable(
         id='table1',
-        columns=[{"name": i, "id": i} for i in info_player],
+        columns=[{"name": col, "id": info_player[idx]} for (idx, col) in enumerate(labels_table)],
         data=df[df['long_name'] == player1].to_dict('records'),
         style_cell={'textAlign': 'left'},
         style_data_conditional=[
@@ -76,7 +77,8 @@ dashtable_1 = dash_table.DataTable(
 
 dashtable_2 = dash_table.DataTable(
         id='table2',
-        columns=[{"name": i, "id": i} for i in info_player[::-1]],
+        # columns=[{"name": i, "id": i} for i in info_player[::-1]],
+        columns=[{"name": col, "id": info_player[idx]} for (idx, col) in enumerate(labels_table)],
         data=df[df['long_name'] == player2].to_dict('records'),
         style_data_conditional=[
             {
@@ -795,12 +797,12 @@ def tab_1_function(player1, player2):
     )
     # cards
     p_pos_1 = df1[df1['long_name'] == player1]["team_position"]
-    p_value_1 = str(df1[df1['long_name'] == player1]["value_eur"].values[0] / 1000000) +"M Euro"
+    p_value_1 = str(df1[df1['long_name'] == player1]["value_eur"].values[0] / 1000000) +" M Euro"
     p_skill_1 = df1[df1['long_name'] == player1]["skill_moves"]
     p_foot_1 =  df1[df1['long_name'] == player1]["preferred_foot"]
 
     p_pos_2 = df2[df2['long_name'] == player2]["team_position"]
-    p_value_2 = str(df2[df2['long_name'] == player2]["value_eur"].values[0] / 1000000) +"M Euro"
+    p_value_2 = str(df2[df2['long_name'] == player2]["value_eur"].values[0] / 1000000) +" M Euro"
     p_skill_2 = df2[df2['long_name'] == player2]["skill_moves"]
     p_foot_2 =  df2[df2['long_name'] == player2]["preferred_foot"]
 
