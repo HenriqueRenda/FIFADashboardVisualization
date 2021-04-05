@@ -765,8 +765,8 @@ def tab_1_function(player1, player2):
         mode="gauge+number",
         gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "#5000bf"}}))
     gauge1.update_layout(
-        height = 200,
-        margin=dict(l=10, r=10, t=20, b=0),
+        height = 300,
+        margin=dict(l=10, r=10, t=40, b=10),
         showlegend=False,
         template="plotly_dark",
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
@@ -803,8 +803,8 @@ def tab_1_function(player1, player2):
         mode="gauge+number",
         gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgb(255,171,0)"}}))
     gauge2.update_layout(
-        height = 200,
-        margin=dict(l=10, r=10, t=20, b=0),
+        height = 300,
+        margin=dict(l=10, r=10, t=40, b=10),
         showlegend=False,
         template="plotly_dark",
         plot_bgcolor = 'rgba(0, 0, 0, 0)',
