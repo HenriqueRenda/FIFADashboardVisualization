@@ -60,13 +60,7 @@ dashtable_1 = dash_table.DataTable(
         id='table1',
         columns=[{"name": i, "id": i} for i in info_player],
         data=df[df['long_name'] == player1].to_dict('records'),
-
-        style_cell_conditional=[
-            {
-                'if': {'column_id': c},
-                'textAlign': 'left'
-            } for c in ['Date', 'Region']
-        ],
+        style_cell={'textAlign': 'left'},
         style_data_conditional=[
             {
                 'if': {'row_index': 'odd'},
@@ -82,15 +76,8 @@ dashtable_1 = dash_table.DataTable(
 
 dashtable_2 = dash_table.DataTable(
         id='table2',
-        columns=[{"name": i, "id": i} for i in info_player],
+        columns=[{"name": i, "id": i} for i in info_player[::-1]],
         data=df[df['long_name'] == player2].to_dict('records'),
-        
-        style_cell_conditional=[
-            {
-                'if': {'column_id': c},
-                'textAlign': 'left'
-            } for c in ['Date', 'Region']
-        ],
         style_data_conditional=[
             {
                 'if': {'row_index': 'odd'},
@@ -296,6 +283,119 @@ controls_club = dbc.Card(
     className="controls",
 )
 
+cards_1 = dbc.CardDeck(
+    [
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Position", className="card-title"),
+                    html.Div(id="P_position1"),
+                ]
+            )
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Value", className="card-title"),
+                    html.Div(id="P_value1"),
+                ]
+            )
+        ),        
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Skill moves", className="card-title"),
+                    html.Div(id="P_skill1"),
+                ]
+            )
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Prefer foot", className="card-title"),
+                    html.Div(id="P_foot1"),
+                ]
+            )
+        ),        
+    ]
+)
+cards_2 = dbc.CardDeck(
+    [
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Prefer foot", className="card-title"),
+                    html.Div(id="P_foot2"),
+                ]
+            )
+        ), 
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Skill moves", className="card-title"),
+                    html.Div(id="P_skill2"),
+                ]
+            )
+        ),    
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Value", className="card-title"),
+                    html.Div(id="P_value2"),
+                ]
+            )
+        ),                       
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Position", className="card-title"),
+                    html.Div(id="P_position2"),
+                ]
+            )
+        ),     
+    ]
+)
+cards_3 = dbc.CardDeck(
+    [
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Overall", className="card-title"),
+                    dcc.Graph(id='graph_example_1'),
+                ]
+            )
+        ), 
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Skills", className="card-title"),
+                    dcc.Graph(id='graph_example_3'),
+                ]
+            )
+        ),  
+    ]
+)
+cards_4 = dbc.CardDeck(
+    [
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Skills", className="card-title"),
+                    dcc.Graph(id='graph_example_4'),
+                ]
+            )
+        ), 
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.Div("Overall", className="card-title"),
+                    dcc.Graph(id='graph_example_2'),
+                ]
+            )
+        ),  
+    ]
+)
+
 tab1_content = html.Div(
     [
         dbc.Card(
@@ -309,23 +409,25 @@ tab1_content = html.Div(
                             dbc.Row(controls_player_1),
                             dbc.Row(html.Img(src='/assets/player_1.png',className="playerImg"))
                         ],sm=3),
-                        dbc.Col(dcc.Graph(id='graph_example'), sm=6),
+                        dbc.Col(dcc.Graph(id='graph_example'), sm=5, align = 'center'),
                         dbc.Col([
                             dbc.Row(controls_player_2),
                             dbc.Row(html.Img(src='/assets/player_3.png',className="playerImg"))
                         ],sm=3),
-                    ]),
+                    ],justify="between"),
                     dbc.Row([
-                        dbc.Col(dashtable_1,sm=6),
-                        dbc.Col(dashtable_2,sm=6),
-                    ]),
-                    dbc.Row([
-                        dbc.Col(dcc.Graph(id='graph_example_1'),sm=6),
-                        dbc.Col(dcc.Graph(id='graph_example_2'),sm=6),
-                    ]),
-                    dbc.Row([
-                        dbc.Col(dcc.Graph(id='graph_example_3'),sm=6),
-                        dbc.Col(dcc.Graph(id='graph_example_4'),sm=6),
+                        dbc.Col(
+                            [dashtable_1,
+                            html.Br(),
+                            cards_1,
+                            html.Br(),
+                            cards_3],sm=6),
+                        dbc.Col(
+                            [dashtable_2,
+                            html.Br(),
+                            cards_2,
+                            html.Br(),
+                            cards_4],sm=6),
                     ]),
                 ]
             )
@@ -524,14 +626,22 @@ def plots_clubs(league,x_val,y_val):
 #----------------Callbacks for 1st tab, clubs analysis----------------#
 
 @app.callback(
-    [
+    [   
         Output('graph_example', 'figure'),
         Output('table1', 'data'),
         Output('graph_example_1', 'figure'),
         Output('graph_example_3', 'figure'),
         Output('table2', 'data'),
         Output('graph_example_2', 'figure'),
-        Output('graph_example_4', 'figure')
+        Output('graph_example_4', 'figure'),
+        Output("P_position1","children"),
+        Output("P_value1",'children'),
+        Output("P_skill1",'children'),
+        Output("P_foot1",'children'),
+        Output("P_position2","children"),
+        Output("P_value2",'children'),
+        Output("P_skill2",'children'),
+        Output("P_foot2",'children')
     ],
     [
         Input('player1', 'value'),
@@ -548,41 +658,62 @@ def tab_1_function(player1, player2):
     df1_for_plot.columns = ['score']
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skill_player].iloc[0])
     df2_for_plot.columns = ['score']
+    list_scores = [df1_for_plot.index[i] +' = ' + str(df1_for_plot['score'][i]) for i in range(len(df1_for_plot))]
+    text_scores_1 = player1
+    for i in list_scores:
+        text_scores_1 += '<br>' + i
+
+    list_scores = [df2_for_plot.index[i] +' = ' + str(df2_for_plot['score'][i]) for i in range(len(df2_for_plot))]
+    text_scores_2 = player2
+    for i in list_scores:
+        text_scores_2 += '<br>' + i
+
     fig = go.Figure(data=go.Scatterpolar(
-      r=df1_for_plot['score'],
-      theta=df1_for_plot.index,
-      fill='toself',
-        name = player1
+        r=df1_for_plot['score'],
+        theta=df1_for_plot.index,
+        fill='toself', 
+        #marker_color = '#711bf7',   
+        opacity =1, 
+        hoverinfo = "text" ,
+        name = text_scores_1,
+        text  = [df1_for_plot.index[i] +' = ' + str(df1_for_plot['score'][i]) for i in range(len(df1_for_plot))]
     ))
     fig.add_trace(go.Scatterpolar(
-          r=df2_for_plot['score'],
-          theta=df2_for_plot.index,
-          fill='toself',
-          name= player2
-    ))
+        r=df2_for_plot['score'],
+        theta=df2_for_plot.index,
+        fill='toself',
+        #marker_color = '#dee600',
+        hoverinfo = "text" ,
+        name= text_scores_2,
+        text  = [df2_for_plot.index[i] +' = ' + str(df2_for_plot['score'][i]) for i in range(len(df2_for_plot))]
+        ))
+
     fig.update_layout(
-      polar=dict(
-          hole=0.2,
-          bgcolor="white",
-     radialaxis=dict(
-          visible=True,
-            type='linear',
-            autotypenumbers='strict',
-            autorange=False,
-            range=[30, 100],
-            angle=90,
-            showline=False,
-    #         showgrid=False
-            gridcolor='black'
-        )
-      ),
-      showlegend=True,
-      template="plotly_dark",
-              plot_bgcolor = 'rgba(0, 0, 0, 0)',
-            paper_bgcolor = 'rgba(0, 0, 0, 0)',
-            font_color="black",
-            font_size= 15
+        polar=dict(
+            hole=0.1,
+            bgcolor="white",
+            radialaxis=dict(
+                visible=True,
+                type='linear',
+                autotypenumbers='strict',
+                autorange=False,
+                range=[30, 100],
+                angle=90,
+                showline=False,
+                showticklabels=False, ticks='',
+                gridcolor='black'),
+                ),
+        width = 550,
+        height = 550,
+        margin=dict(l=80, r=80, t=20, b=20),
+        showlegend=False,
+        template="plotly_dark",
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font_color="black",
+        font_size= 15
     )
+
 
     # table 1
     table_updated1 = df[df['long_name'] == player1].to_dict('records')
@@ -591,18 +722,38 @@ def tab_1_function(player1, player2):
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1]['potential'])
     df1_for_plot['name'] = player2
     gauge1 = go.Figure(go.Indicator(
-    domain={'x': [0, 1], 'y': [0, 1]},
-    value=df1_for_plot.potential.iloc[0],
-    mode="gauge+number",
-    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(133,61,246,1)"}}))
-
+        domain={'x': [0, 1], 'y': [0, 1]},
+        value=df1_for_plot.potential.iloc[0],
+        mode="gauge+number",
+        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(133,61,246,1)"}}))
+    gauge1.update_layout(
+        width = 300,
+        height = 200,
+        margin=dict(l=40, r=40, t=40, b=40),
+        showlegend=False,
+        template="plotly_dark",
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font_color="black",
+        font_size= 15
+    )
     # barplot 1
     df1_for_plot = pd.DataFrame(df1[df1['long_name'] == player1][skills1].iloc[0].reset_index())
     df1_for_plot.rename(columns={df1_for_plot.columns[1]: 'counts'}, inplace=True)
     df1_for_plot.rename(columns={df1_for_plot.columns[0]: 'skills'}, inplace=True)
-    barplot1 = px.bar(df1_for_plot, x='counts', y='skills', orientation='h')
+    barplot1 = px.bar(df1_for_plot, x='skills', y='counts')
     barplot1.update_traces(marker_color='rgba(133,61,246,1)')
-
+    barplot1.update_layout(
+        width = 300,
+        height = 300,
+        margin=dict(l=50, r=50, t=50, b=50),
+        showlegend=False,
+        template="plotly_dark",
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font_color="black",
+        font_size= 10
+    )
     # table 2
     table_updated2 = df[df['long_name'] == player2].to_dict('records')
 
@@ -610,20 +761,51 @@ def tab_1_function(player1, player2):
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2]['potential'])
     df2_for_plot['name'] = player2
     gauge2 = go.Figure(go.Indicator(
-    domain={'x': [0, 1], 'y': [0, 1]},
-    value=df2_for_plot.potential.iloc[0],
-    mode="gauge+number",
-    gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(189,34,250,1)"}}))
-
+        domain={'x': [0, 1], 'y': [0, 1]},
+        value=df2_for_plot.potential.iloc[0],
+        mode="gauge+number",
+        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': "rgba(189,34,250,1)"}}))
+    gauge2.update_layout(
+        width = 300,
+        height = 200,
+        margin=dict(l=40, r=40, t=40, b=40),
+        showlegend=False,
+        template="plotly_dark",
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font_color="black",
+        font_size= 15
+    )
     # bar plot 2
     df2_for_plot = pd.DataFrame(df2[df2['long_name'] == player2][skills1].iloc[0].reset_index())
     df2_for_plot.rename(columns={df2_for_plot.columns[1]:'counts'}, inplace=True )
     df2_for_plot.rename(columns={df2_for_plot.columns[0]:'skills'}, inplace=True )
-    barplot2 = px.bar(df2_for_plot,x='counts',y='skills',orientation='h')
+    barplot2 = px.bar(df2_for_plot,x='skills',y='counts')
     barplot2.update_traces(marker_color='rgba(189,34,250,1)')
+    barplot2.update_layout(
+    width = 300,
+    height = 300,
+    margin=dict(l=50, r=50, t=50, b=50),
+    showlegend=False,
+    template="plotly_dark",
+    plot_bgcolor = 'rgba(0, 0, 0, 0)',
+    paper_bgcolor = 'rgba(0, 0, 0, 0)',
+    font_color="black",
+    font_size= 10
+    )
+    # cards
+    p_pos_1 = df1[df1['long_name'] == player1]["team_position"]
+    p_value_1 = str(df1[df1['long_name'] == player1]["value_eur"].values[0] / 1000000) +"M Euro"
+    p_skill_1 = df1[df1['long_name'] == player1]["skill_moves"]
+    p_foot_1 =  df1[df1['long_name'] == player1]["preferred_foot"]
+
+    p_pos_2 = df2[df2['long_name'] == player2]["team_position"]
+    p_value_2 = str(df2[df2['long_name'] == player2]["value_eur"].values[0] / 1000000) +"M Euro"
+    p_skill_2 = df2[df2['long_name'] == player2]["skill_moves"]
+    p_foot_2 =  df2[df2['long_name'] == player2]["preferred_foot"]
 
     # outputs
-    return fig, table_updated1, gauge1, barplot1, table_updated2, gauge2, barplot2
+    return fig, table_updated1, gauge1, barplot1, table_updated2, gauge2, barplot2,p_pos_1, p_value_1, p_skill_1, p_foot_1, p_pos_2, p_value_2, p_skill_2, p_foot_2
 
 
 
