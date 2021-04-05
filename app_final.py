@@ -362,7 +362,7 @@ cards_3 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Overall", className="card-title1"),
+                    html.Div("Potential", className="card-title1"),
                     dcc.Graph(id='graph_example_1'),
                 ]
             )
@@ -390,7 +390,7 @@ cards_4 = dbc.CardDeck(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.Div("Overall", className="card-title2"),
+                    html.Div("Potential", className="card-title2"),
                     dcc.Graph(id='graph_example_2'),
                 ]
             )
