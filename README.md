@@ -8,7 +8,7 @@ The dashboard was created with Plotly, an interactive graphing library for Pytho
 
 The second objective of this project was to create a more pleasant experience for the user, and to improve the layout we used HTML, CSS and a framework from CSS called Bootstrap. In this way we achieved a better organization of our Dash App and the users can navigate through the sections like a normal web page
 
-The data set provided include the players data for the Career Mode from FIFA 15 to FIFA 21, but we only used the last one. The data allows multiple comparison between every player available in FIFA, in particular the one about the year of 2021. The dataset contains every player available in FIFA 21, 100+ attributes, URL of the scraped players, player positions (with the role in the club and in the national team) and player attributes with statistics as Attacking, Skills, Defense, Mentality, GK Skills, etc. The data has been scraped from the available website: https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset.
+The data set provided include the players data for the Career Mode from FIFA 15 to FIFA 21. The dataset contains every player available in FIFA 21, 100+ attributes, positions and player attributes with statistics as Attacking, Skills, Defense, Mentality, GK Skills, etc. The data has been scraped from the available website: https://www.kaggle.com/stefanoleone992/fifa-21-complete-player-dataset.
 
 The report of the dashboard: https://bit.ly/2Qx0D80
 Explore our online dashboard at https://fifagen.herokuapp.com/
