@@ -1,4 +1,4 @@
-# FIFA Generation - Dashboard - Data Visualization Project 2020/2021
+## FIFA Generation - Dashboard - Data Visualization Project 2020/2021
 
 
 The dashboard created aims to inspect some questions that all the football-lovers mind. How will be the next generation of football players? What will happen after the decade of Messi and Ronaldo? 
