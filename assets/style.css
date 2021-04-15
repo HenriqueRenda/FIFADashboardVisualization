@@ -30,8 +30,11 @@ body {
 }
 .card_info2 {
     text-align: end;
+    color:rgb(255,171,0);
 }
-
+.card_info1 {
+    color:#5000bf;
+}
 #age_slider {
     margin: 5% 5% 5% 0%;
     padding: 1%;
